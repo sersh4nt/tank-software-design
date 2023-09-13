@@ -36,7 +36,7 @@ public class Player extends Entity {
     }
 
     private void updateDirection(Direction direction, Obstacle obstacle) {
-        if (isMoving()) {
+        if (isMoving() || direction == Direction.NONE) {
             return;
         }
         this.direction = direction;

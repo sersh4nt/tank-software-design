@@ -6,7 +6,8 @@ public enum Direction {
     RIGHT(0),
     UP(90),
     LEFT(-180),
-    DOWN(-90);
+    DOWN(-90),
+    NONE(1000000);
 
     public final float angle;
 

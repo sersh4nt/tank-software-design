@@ -105,7 +105,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     }
 
     private Direction getNewDirection() {
-        var direction = player.getDirection();
+        var direction = Direction.NONE;
         if (Gdx.input.isKeyPressed(UP) || Gdx.input.isKeyPressed(W)) {
             direction = Direction.UP;
         }
