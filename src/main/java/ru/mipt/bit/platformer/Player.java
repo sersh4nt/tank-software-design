@@ -58,8 +58,4 @@ public class Player extends Entity {
     public void draw(Batch batch) {
         drawTextureRegionUnscaled(batch, getTexture(), rectangle, direction.angle);
     }
-
-    public Direction getDirection() {
-        return direction;
-    }
 }

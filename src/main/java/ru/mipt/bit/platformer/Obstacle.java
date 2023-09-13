@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.GridPoint2;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class Obstacle extends Entity {
-
     public Obstacle(TextureRegion texture, GridPoint2 position) {
         super(texture, position);
     }

@@ -33,7 +33,6 @@ public abstract class Entity implements Drawable {
         return texture;
     }
 
-
     public Rectangle getRectangle() {
         return rectangle;
     }
