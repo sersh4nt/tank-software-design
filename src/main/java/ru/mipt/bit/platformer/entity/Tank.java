@@ -1,25 +1,23 @@
-package ru.mipt.bit.platformer;
+package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.util.Direction;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 
-public class Tank {
+public class Tank extends Entity {
     public static final float MOVEMENT_COMPLETED = 1f;
     public static final float MOVEMENT_STARTED = 0f;
     private static final float MOVEMENT_SPEED = 0.4f;
-    private GridPoint2 coordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress;
-    private Direction direction;
 
     public Tank(GridPoint2 coordinates, Direction direction) {
-        this.coordinates = coordinates;
+        super(coordinates, direction);
         this.destinationCoordinates = coordinates;
         movementProgress = MOVEMENT_COMPLETED;
-        this.direction = direction;
     }
 
     public boolean isMoving() {
@@ -35,19 +33,12 @@ public class Tank {
         this.direction = direction;
     }
 
-    public void updateState(float deltaTime) {
+    public EntityState updateState(float deltaTime) {
         movementProgress = continueProgress(movementProgress, deltaTime, MOVEMENT_SPEED);
         if (!isMoving()) {
             coordinates = destinationCoordinates;
         }
-    }
-
-    public GridPoint2 getCoordinates() {
-        return coordinates;
-    }
-
-    public Direction getDirection() {
-        return direction;
+        return new EntityState(coordinates, destinationCoordinates, direction, movementProgress);
     }
 
     public GridPoint2 getDestinationCoordinates() {
