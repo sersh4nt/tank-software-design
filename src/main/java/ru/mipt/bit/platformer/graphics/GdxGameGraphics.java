@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createSingleLayerMapRenderer;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.getSingleLayer;
 
 public class GdxGameGraphics {
     private final Batch batch = new SpriteBatch();

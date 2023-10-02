@@ -5,7 +5,7 @@ import ru.mipt.bit.platformer.util.CollisionHandler;
 import ru.mipt.bit.platformer.util.Direction;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.continueProgress;
 
 
 public class Tank implements Entity, Collidable, Movable {
@@ -40,7 +40,7 @@ public class Tank implements Entity, Collidable, Movable {
             return;
         }
 
-        var newDestination = coordinates.cpy().add(direction.getVector());
+        var newDestination = direction.apply(coordinates);
         if (!collisionHandler.isOccupied(newDestination)) {
             movementProgress = MOVEMENT_STARTED;
             destinationCoordinates = newDestination;

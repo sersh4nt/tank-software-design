@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import ru.mipt.bit.platformer.entity.Obstacle;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.moveRectangleAtTileCenter;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.moveRectangleAtTileCenter;
 
 public class GdxTreeImpl implements Renderable {
     private final GdxTexture texture;

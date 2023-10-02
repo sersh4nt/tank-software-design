@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import ru.mipt.bit.platformer.entity.Tank;
 import ru.mipt.bit.platformer.util.TileMovement;
 
-import static ru.mipt.bit.platformer.util.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxTankImpl implements Renderable {
     private final Tank tank;

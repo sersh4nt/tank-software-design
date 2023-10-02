@@ -16,11 +16,11 @@ public enum Direction {
         this.rotation = rotation;
     }
 
-    public float getRotation() {
-        return rotation;
+    public GridPoint2 apply(GridPoint2 source) {
+        return source.cpy().add(vector);
     }
 
-    public GridPoint2 getVector() {
-        return vector;
+    public float getRotation() {
+        return rotation;
     }
 }
