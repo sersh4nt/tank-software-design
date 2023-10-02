@@ -4,17 +4,22 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.commands.MoveCommand;
+import ru.mipt.bit.platformer.entity.Entity;
 import ru.mipt.bit.platformer.entity.Obstacle;
 import ru.mipt.bit.platformer.entity.Tank;
-import ru.mipt.bit.platformer.graphics.GameGraphics;
-import ru.mipt.bit.platformer.graphics.GdxGameGraphicsImpl;
-import ru.mipt.bit.platformer.util.Action;
+import ru.mipt.bit.platformer.graphics.GdxGameGraphics;
+import ru.mipt.bit.platformer.graphics.GdxTankImpl;
+import ru.mipt.bit.platformer.graphics.GdxTexture;
+import ru.mipt.bit.platformer.graphics.GdxTreeImpl;
 import ru.mipt.bit.platformer.util.Direction;
+import ru.mipt.bit.platformer.util.GameEngine;
+import ru.mipt.bit.platformer.util.InputController;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
-    private GameGraphics gameGraphics;
+    private GdxGameGraphics gdxGameGraphics;
     private GameEngine gameEngine;
     private InputController inputController;
 
@@ -28,43 +33,46 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        // later we will inject both engine and graphics, as well as players and obstacles
-
         gameEngine = new GameEngine();
-        var player = new Tank(new GridPoint2(1, 1), Direction.RIGHT);
-        var obstacle = new Obstacle(new GridPoint2(1, 3));
-        gameEngine.setPlayer(player);
-        gameEngine.addObstacle(obstacle);
+        gdxGameGraphics = new GdxGameGraphics("level.tmx");
 
-        gameGraphics = new GdxGameGraphicsImpl();
-        gameGraphics.loadLevel("level.tmx");
-        var playerTexture = gameGraphics.createTexture("images/tank_blue.png");
-        var obstacleTexture = gameGraphics.createTexture("images/greenTree.png");
-        gameGraphics.addEntityTexture(player, playerTexture);
-        gameGraphics.addEntityTexture(obstacle, obstacleTexture);
-
-        initKeyMappings();
+        createPlayer();
+        createObstacles();
     }
 
-    private void initKeyMappings() {
+    private void createObstacles() {
+        var obstacle = new Obstacle(new GridPoint2(1, 3));
+        gameEngine.addEntity(obstacle);
+        var obstacleTexture = new GdxTexture("images/greenTree.png");
+        gdxGameGraphics.addRenderable(new GdxTreeImpl(obstacle, obstacleTexture, gdxGameGraphics.getGroundLayer()));
+    }
+
+    private void createPlayer() {
+        var player = new Tank(new GridPoint2(1, 1), Direction.RIGHT, 0.4f);
+        gameEngine.addEntity(player);
+        var playerTexture = new GdxTexture("images/tank_blue.png");
+        gdxGameGraphics.addRenderable(new GdxTankImpl(player, playerTexture, gdxGameGraphics.getTileMovement()));
+        initKeyMappings(player);
+    }
+
+    private void initKeyMappings(Entity player) {
         inputController = new InputController();
-        inputController.addMapping(UP, Action.MOVE_UP);
-        inputController.addMapping(W, Action.MOVE_UP);
-        inputController.addMapping(LEFT, Action.MOVE_LEFT);
-        inputController.addMapping(A, Action.MOVE_LEFT);
-        inputController.addMapping(DOWN, Action.MOVE_DOWN);
-        inputController.addMapping(S, Action.MOVE_DOWN);
-        inputController.addMapping(RIGHT, Action.MOVE_RIGHT);
-        inputController.addMapping(D, Action.MOVE_RIGHT);
+        inputController.addMapping(UP, player, new MoveCommand(Direction.UP));
+        inputController.addMapping(W, player, new MoveCommand(Direction.UP));
+        inputController.addMapping(LEFT, player, new MoveCommand(Direction.LEFT));
+        inputController.addMapping(A, player, new MoveCommand(Direction.LEFT));
+        inputController.addMapping(DOWN, player, new MoveCommand(Direction.DOWN));
+        inputController.addMapping(S, player, new MoveCommand(Direction.DOWN));
+        inputController.addMapping(RIGHT, player, new MoveCommand(Direction.RIGHT));
+        inputController.addMapping(D, player, new MoveCommand(Direction.RIGHT));
     }
 
     @Override
     public void render() {
-        gameGraphics.clearScreen();
-        float deltaTime = gameGraphics.getDeltaTime();
-        Action action = inputController.getAction();
-        var gameState = gameEngine.updateGameState(deltaTime, action);
-        gameGraphics.renderGame(gameState);
+        float deltaTime = gdxGameGraphics.getDeltaTime();
+        inputController.applyCommands();
+        gameEngine.updateGameState(deltaTime);
+        gdxGameGraphics.render();
     }
 
     @Override
@@ -84,6 +92,6 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gameGraphics.dispose();
+        gdxGameGraphics.dispose();
     }
 }

@@ -1,44 +1,70 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.util.CollisionHandler;
 import ru.mipt.bit.platformer.util.Direction;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
 
-public class Tank extends Entity {
+public class Tank implements Entity, Collidable, Movable {
     public static final float MOVEMENT_COMPLETED = 1f;
     public static final float MOVEMENT_STARTED = 0f;
-    private static final float MOVEMENT_SPEED = 0.4f;
+    private final float movementSpeed;
+    private CollisionHandler collisionHandler = new CollisionHandler();
     private GridPoint2 destinationCoordinates;
-    private float movementProgress;
+    private Direction direction;
+    private GridPoint2 coordinates;
+    private float movementProgress = MOVEMENT_COMPLETED;
 
-    public Tank(GridPoint2 coordinates, Direction direction) {
-        super(coordinates, direction);
-        this.destinationCoordinates = coordinates;
-        movementProgress = MOVEMENT_COMPLETED;
+    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed) {
+        this.coordinates = coordinates;
+        this.direction = direction;
+        this.movementSpeed = movementSpeed;
+        destinationCoordinates = coordinates;
     }
 
     public boolean isMoving() {
         return !isEqual(movementProgress, MOVEMENT_COMPLETED);
     }
 
-    public void moveTo(GridPoint2 destination) {
-        destinationCoordinates = destination;
-        movementProgress = MOVEMENT_STARTED;
+
+    @Override
+    public void addCollisionHandler(CollisionHandler collisionHandler) {
+        this.collisionHandler = collisionHandler;
     }
+
+    public void moveTo(Direction direction) {
+        if (isMoving()) {
+            return;
+        }
+
+        var newDestination = coordinates.cpy().add(direction.getVector());
+        if (!collisionHandler.isOccupied(newDestination)) {
+            movementProgress = MOVEMENT_STARTED;
+            destinationCoordinates = newDestination;
+        }
+
+        rotate(direction);
+    }
+
 
     public void rotate(Direction direction) {
         this.direction = direction;
     }
 
-    public EntityState updateState(float deltaTime) {
-        movementProgress = continueProgress(movementProgress, deltaTime, MOVEMENT_SPEED);
+    @Override
+    public void updateState(float deltaTime) {
+        movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
         if (!isMoving()) {
             coordinates = destinationCoordinates;
         }
-        return new EntityState(coordinates, destinationCoordinates, direction, movementProgress);
+    }
+
+    @Override
+    public GridPoint2 getCoordinates() {
+        return coordinates;
     }
 
     public GridPoint2 getDestinationCoordinates() {
@@ -47,5 +73,9 @@ public class Tank extends Entity {
 
     public float getMovementProgress() {
         return movementProgress;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }
