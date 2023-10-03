@@ -48,7 +48,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     }
 
     private void createPlayer() {
-        var player = new Tank(new GridPoint2(1, 1), Direction.RIGHT, 0.4f);
+        var player = new Tank(new GridPoint2(1, 1), Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
         gameEngine.addEntity(player);
         var playerTexture = new GdxTexture("images/tank_blue.png");
         gdxGameGraphics.addRenderable(new GdxTankImpl(player, playerTexture, gdxGameGraphics.getTileMovement()));

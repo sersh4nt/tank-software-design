@@ -2,7 +2,6 @@ package ru.mipt.bit.platformer.util;
 
 import ru.mipt.bit.platformer.entity.Collidable;
 import ru.mipt.bit.platformer.entity.Entity;
-import ru.mipt.bit.platformer.entity.Movable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +14,6 @@ public class GameEngine {
         if (entity instanceof Collidable) {
             collisionHandler.addCollidable((Collidable) entity);
         }
-        if (entity instanceof Movable) {
-            ((Movable) entity).addCollisionHandler(collisionHandler);
-        }
         entities.add(entity);
     }
 
@@ -25,5 +21,9 @@ public class GameEngine {
         for (var entity : entities) {
             entity.updateState(deltaTime);
         }
+    }
+
+    public CollisionHandler getCollisionHandler() {
+        return collisionHandler;
     }
 }

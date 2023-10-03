@@ -12,7 +12,7 @@ public class Tank implements Entity, Collidable, Movable {
     public static final float MOVEMENT_COMPLETED = 1f;
     public static final float MOVEMENT_STARTED = 0f;
     private final float movementSpeed;
-    private CollisionHandler collisionHandler = new CollisionHandler();
+    private CollisionHandler collisionHandler = null;
     private GridPoint2 destinationCoordinates;
     private Direction direction;
     private GridPoint2 coordinates;
@@ -25,15 +25,18 @@ public class Tank implements Entity, Collidable, Movable {
         destinationCoordinates = coordinates;
     }
 
+    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed, CollisionHandler collisionHandler) {
+        this.coordinates = coordinates;
+        this.direction = direction;
+        this.movementSpeed = movementSpeed;
+        destinationCoordinates = coordinates;
+        this.collisionHandler = collisionHandler;
+    }
+
     public boolean isMoving() {
         return !isEqual(movementProgress, MOVEMENT_COMPLETED);
     }
 
-
-    @Override
-    public void addCollisionHandler(CollisionHandler collisionHandler) {
-        this.collisionHandler = collisionHandler;
-    }
 
     public void moveTo(Direction direction) {
         if (isMoving()) {
@@ -41,7 +44,7 @@ public class Tank implements Entity, Collidable, Movable {
         }
 
         var newDestination = direction.apply(coordinates);
-        if (!collisionHandler.isOccupied(newDestination)) {
+        if (collisionHandler == null || !collisionHandler.isOccupied(newDestination)) {
             movementProgress = MOVEMENT_STARTED;
             destinationCoordinates = newDestination;
         }
