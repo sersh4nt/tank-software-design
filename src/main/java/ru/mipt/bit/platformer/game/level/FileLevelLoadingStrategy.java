@@ -37,7 +37,6 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
     private List<String> readFileContent() throws FileNotFoundException {
         var result = new ArrayList<String>();
 
-
         var resource = getClass().getClassLoader().getResource(filename);
         if (resource == null) {
             return result;
