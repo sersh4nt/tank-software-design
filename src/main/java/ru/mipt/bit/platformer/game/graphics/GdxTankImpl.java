@@ -1,10 +1,10 @@
-package ru.mipt.bit.platformer.graphics;
+package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import ru.mipt.bit.platformer.entity.Tank;
-import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
-import static ru.mipt.bit.platformer.graphics.GdxGameUtils.drawTextureRegionUnscaled;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxTankImpl implements Renderable {
     private final Tank tank;

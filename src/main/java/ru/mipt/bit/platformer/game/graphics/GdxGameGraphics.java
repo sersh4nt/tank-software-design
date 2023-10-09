@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.graphics;
+package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,14 +8,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.util.TileMovement;
+import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createSingleLayerMapRenderer;
-import static ru.mipt.bit.platformer.graphics.GdxGameUtils.getSingleLayer;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
+import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLayer;
 
 public class GdxGameGraphics {
     private final Batch batch = new SpriteBatch();

@@ -1,7 +1,6 @@
-package ru.mipt.bit.platformer.util;
+package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.entity.Collidable;
 
 import java.util.ArrayList;
 import java.util.HashSet;

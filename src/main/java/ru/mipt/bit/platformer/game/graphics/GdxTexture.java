@@ -1,10 +1,9 @@
-package ru.mipt.bit.platformer.graphics;
+package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-
-import static ru.mipt.bit.platformer.graphics.GdxGameUtils.createBoundingRectangle;
+import ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils;
 
 public class GdxTexture {
     private final Texture texture;
@@ -14,7 +13,7 @@ public class GdxTexture {
     public GdxTexture(String textureName) {
         texture = new Texture(textureName);
         textureRegion = new TextureRegion(texture);
-        rectangle = createBoundingRectangle(textureRegion);
+        rectangle = GdxGameUtils.createBoundingRectangle(textureRegion);
     }
 
     public Texture getTexture() {
