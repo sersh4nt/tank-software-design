@@ -1,10 +1,9 @@
-package ru.mipt.bit.platformer.util;
+package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.entity.Obstacle;
-import ru.mipt.bit.platformer.entity.Tank;
+import ru.mipt.bit.platformer.game.Direction;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

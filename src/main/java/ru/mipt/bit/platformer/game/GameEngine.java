@@ -1,7 +1,8 @@
-package ru.mipt.bit.platformer.util;
+package ru.mipt.bit.platformer.game;
 
-import ru.mipt.bit.platformer.entity.Collidable;
-import ru.mipt.bit.platformer.entity.Entity;
+import ru.mipt.bit.platformer.game.entity.Collidable;
+import ru.mipt.bit.platformer.game.entity.CollisionHandler;
+import ru.mipt.bit.platformer.game.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;

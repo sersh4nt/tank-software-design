@@ -1,8 +1,7 @@
-package ru.mipt.bit.platformer.util;
+package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.Gdx;
-import ru.mipt.bit.platformer.commands.Command;
-import ru.mipt.bit.platformer.entity.Entity;
+import ru.mipt.bit.platformer.game.Command;
 
 import java.util.AbstractMap;
 import java.util.HashMap;

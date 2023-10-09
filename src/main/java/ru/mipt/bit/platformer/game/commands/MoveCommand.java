@@ -1,8 +1,9 @@
-package ru.mipt.bit.platformer.commands;
+package ru.mipt.bit.platformer.game.commands;
 
-import ru.mipt.bit.platformer.entity.Entity;
-import ru.mipt.bit.platformer.entity.Movable;
-import ru.mipt.bit.platformer.util.Direction;
+import ru.mipt.bit.platformer.game.Command;
+import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.entity.Movable;
 
 public class MoveCommand implements Command {
     private final Direction direction;
