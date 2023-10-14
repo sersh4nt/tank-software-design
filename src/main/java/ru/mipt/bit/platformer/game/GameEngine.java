@@ -9,11 +9,19 @@ import java.util.List;
 
 public class GameEngine {
     private final List<Entity> entities = new ArrayList<>();
-    private final CollisionHandler collisionHandler = new CollisionHandler();
+    private final CollisionHandler collisionHandler;
+
+    public GameEngine() {
+        collisionHandler = new CollisionHandler();
+    }
+
+    public GameEngine(int width, int height) {
+        collisionHandler = new CollisionHandler(width, height);
+    }
 
     public void addEntity(Entity entity) {
-        if (entity instanceof Collidable) {
-            collisionHandler.addCollidable((Collidable) entity);
+        if (entity instanceof Collidable collidable) {
+            collisionHandler.addCollidable(collidable);
         }
         entities.add(entity);
     }

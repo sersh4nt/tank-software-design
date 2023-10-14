@@ -14,8 +14,8 @@ public class MoveCommand implements Command {
 
     @Override
     public void apply(Entity entity) {
-        if (entity instanceof Movable) {
-            ((Movable) entity).moveTo(direction);
+        if (entity instanceof Movable movable) {
+            movable.moveTo(direction);
         }
     }
 }

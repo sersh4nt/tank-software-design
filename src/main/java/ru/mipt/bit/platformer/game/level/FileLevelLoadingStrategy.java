@@ -1,6 +1,11 @@
 package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.GameEngine;
+import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.entity.Obstacle;
+import ru.mipt.bit.platformer.game.entity.Tank;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,14 +18,16 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
     private static final char TREE = 'T';
     private static final char PLAYER = 'X';
     private final String filename;
+    private final List<Entity> entities = new ArrayList<>();
+    private Tank player = null;
+    private List<String> fileContent = null;
 
     public FileLevelLoadingStrategy(String filename) {
         this.filename = filename;
     }
 
     @Override
-    public LevelDescription loadLevel() {
-        List<String> fileContent;
+    public GameEngine loadLevel() {
         try {
             fileContent = readFileContent();
         } catch (FileNotFoundException e) {
@@ -28,10 +35,38 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
             return null;
         }
 
-        var obstacles = getCharPositions(fileContent, TREE);
-        var player = getCharPositions(fileContent, PLAYER).get(0);
+        var gameEngine = new GameEngine(fileContent.get(0).length(), fileContent.size());
 
-        return new LevelDescription(obstacles, player);
+        generatePlayer(gameEngine);
+        generateObstacles(gameEngine);
+
+        return gameEngine;
+    }
+
+    private void generatePlayer(GameEngine gameEngine) {
+        var playerPosition = getCharPositions(fileContent, PLAYER).get(0);
+        player = new Tank(playerPosition, Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
+        gameEngine.addEntity(player);
+        entities.add(player);
+    }
+
+    private void generateObstacles(GameEngine gameEngine) {
+        var obstaclePositions = getCharPositions(fileContent, TREE);
+        for (var position : obstaclePositions) {
+            var obstacle = new Obstacle(position);
+            entities.add(obstacle);
+            gameEngine.addEntity(obstacle);
+        }
+    }
+
+    @Override
+    public Tank getPlayer() {
+        return player;
+    }
+
+    @Override
+    public List<Entity> getEntities() {
+        return entities;
     }
 
     private List<String> readFileContent() throws FileNotFoundException {

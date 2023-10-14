@@ -12,10 +12,9 @@ import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
 import ru.mipt.bit.platformer.game.graphics.GdxTankImpl;
-import ru.mipt.bit.platformer.game.graphics.GdxTexture;
 import ru.mipt.bit.platformer.game.graphics.GdxTreeImpl;
+import ru.mipt.bit.platformer.game.graphics.Renderable;
 import ru.mipt.bit.platformer.game.level.FileLevelLoadingStrategy;
-import ru.mipt.bit.platformer.game.level.LevelDescription;
 import ru.mipt.bit.platformer.game.level.LevelLoadingStrategy;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -24,6 +23,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     private GdxGameGraphics gdxGameGraphics;
     private GameEngine gameEngine;
     private InputController inputController;
+    private LevelLoadingStrategy loadingStrategy;
 
 
     public static void main(String[] args) {
@@ -35,35 +35,32 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        gameEngine = new GameEngine();
+//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
+        loadingStrategy = new FileLevelLoadingStrategy("map.txt");
+
+        gameEngine = loadingStrategy.loadLevel();
+
         gdxGameGraphics = new GdxGameGraphics("level.tmx");
+        bindGraphics();
 
-//        var loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
-        var loadingStrategy = new FileLevelLoadingStrategy("map.txt");
-        createLevel(loadingStrategy);
+        initKeyMappings(loadingStrategy.getPlayer());
     }
 
-    private void createLevel(LevelLoadingStrategy loadingStrategy) {
-        var levelDescription = loadingStrategy.loadLevel();
-        createPlayer(levelDescription);
-        createObstacles(levelDescription);
-    }
-
-    private void createObstacles(LevelDescription levelDescription) {
-        for (var obstaclePosition : levelDescription.obstacles) {
-            var obstacle = new Obstacle(obstaclePosition);
-            gameEngine.addEntity(obstacle);
-            var obstacleTexture = new GdxTexture("images/greenTree.png");
-            gdxGameGraphics.addRenderable(new GdxTreeImpl(obstacle, obstacleTexture, gdxGameGraphics.getGroundLayer()));
+    private void bindGraphics() {
+        for (var entity : loadingStrategy.getEntities()) {
+            var renderable = getRenderableFromEntity(entity);
+            gdxGameGraphics.addRenderable(renderable);
         }
     }
 
-    private void createPlayer(LevelDescription levelDescription) {
-        var player = new Tank(levelDescription.playerPosition, Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
-        gameEngine.addEntity(player);
-        var playerTexture = new GdxTexture("images/tank_blue.png");
-        gdxGameGraphics.addRenderable(new GdxTankImpl(player, playerTexture, gdxGameGraphics.getTileMovement()));
-        initKeyMappings(player);
+    private Renderable getRenderableFromEntity(Entity entity) {
+        if (entity instanceof Obstacle obstacle) {
+            return new GdxTreeImpl(obstacle, gdxGameGraphics.getGroundLayer());
+        }
+        if (entity instanceof Tank tank) {
+            return new GdxTankImpl(tank, gdxGameGraphics.getTileMovement());
+        }
+        return null;
     }
 
     private void initKeyMappings(Entity player) {

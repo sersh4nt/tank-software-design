@@ -24,10 +24,16 @@ class CollisionHandlerTest {
     }
 
     @Test
-    void tankPosition_isOccupied() {
+    void tankPositionIsOccupied() {
         var initialPosition = new GridPoint2(0, 0);
         var tank = new Tank(initialPosition, Direction.RIGHT, 0f, collisionHandler);
         collisionHandler.addCollidable(tank);
         assertTrue(collisionHandler.isOccupied(initialPosition));
+    }
+
+    @Test
+    void testPointIsOccupiedOutsideOfPlayfield() {
+        var pt = new GridPoint2(-1, -1);
+        assertTrue(collisionHandler.isOccupied(pt));
     }
 }

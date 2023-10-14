@@ -6,10 +6,11 @@ import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils;
 
 public class GdxTreeImpl implements Renderable {
+    private final static String TEXTURE_NAME = "images/greenTree.png";
     private final GdxTexture texture;
 
-    public GdxTreeImpl(Obstacle obstacle, GdxTexture texture, TiledMapTileLayer groundLayer) {
-        this.texture = texture;
+    public GdxTreeImpl(Obstacle obstacle, TiledMapTileLayer groundLayer) {
+        texture = new GdxTexture(TEXTURE_NAME);
         GdxGameUtils.moveRectangleAtTileCenter(groundLayer, texture.getRectangle(), obstacle.getCoordinates());
     }
 
