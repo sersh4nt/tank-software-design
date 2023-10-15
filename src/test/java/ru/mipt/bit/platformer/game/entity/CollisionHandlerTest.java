@@ -12,7 +12,7 @@ class CollisionHandlerTest {
 
     @BeforeEach
     void setUp() {
-        collisionHandler = new CollisionHandler();
+        collisionHandler = new CollisionHandler(10, 8);
     }
 
     @Test

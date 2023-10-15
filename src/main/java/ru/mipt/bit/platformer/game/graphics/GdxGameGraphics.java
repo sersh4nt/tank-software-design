@@ -8,6 +8,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
+import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.entity.Obstacle;
+import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 import java.util.ArrayList;
@@ -52,8 +55,19 @@ public class GdxGameGraphics {
         batch.end();
     }
 
-    public void addRenderable(Renderable renderable) {
+    public void addEntity(Entity entity) {
+        var renderable = getRenderableFromEntity(entity);
         renderables.add(renderable);
+    }
+
+    private Renderable getRenderableFromEntity(Entity entity) {
+        if (entity instanceof Obstacle obstacle) {
+            return new GdxTreeImpl(obstacle, groundLayer);
+        }
+        if (entity instanceof Tank tank) {
+            return new GdxTankImpl(tank, tileMovement);
+        }
+        return null;
     }
 
     public void dispose() {
@@ -61,13 +75,5 @@ public class GdxGameGraphics {
             renderable.dispose();
         }
         level.dispose();
-    }
-
-    public TileMovement getTileMovement() {
-        return tileMovement;
-    }
-
-    public TiledMapTileLayer getGroundLayer() {
-        return groundLayer;
     }
 }
