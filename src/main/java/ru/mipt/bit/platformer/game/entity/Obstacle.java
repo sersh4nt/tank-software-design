@@ -1,6 +1,8 @@
 package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.game.Collidable;
+import ru.mipt.bit.platformer.game.Entity;
 
 public class Obstacle implements Entity, Collidable {
     private final GridPoint2 coordinates;

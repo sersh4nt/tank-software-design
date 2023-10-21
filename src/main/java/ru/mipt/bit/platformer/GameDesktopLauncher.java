@@ -5,15 +5,18 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
+import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.commands.RandomEntityController;
-import ru.mipt.bit.platformer.game.entity.Entity;
 import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
 import ru.mipt.bit.platformer.game.level.FileLevelLoadingStrategy;
 import ru.mipt.bit.platformer.game.level.LevelLoadingStrategy;
+import ru.mipt.bit.platformer.game.listener.CompositeListener;
+import ru.mipt.bit.platformer.game.listener.GraphicsListener;
 
 import java.util.Random;
 
@@ -23,7 +26,6 @@ public class GameDesktopLauncher implements ApplicationListener {
     private final InputController inputController = new InputController();
     private GdxGameGraphics gdxGameGraphics;
     private GameEngine gameEngine;
-    private LevelLoadingStrategy loadingStrategy;
 
 
     public static void main(String[] args) {
@@ -35,15 +37,20 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
-        loadingStrategy = new FileLevelLoadingStrategy("map.txt");
-
-        gameEngine = loadingStrategy.loadLevel();
         gdxGameGraphics = new GdxGameGraphics("level.tmx");
 
+//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
+        LevelLoadingStrategy loadingStrategy = new FileLevelLoadingStrategy("map.txt");
+
+        gameEngine = loadingStrategy.loadLevel(setupListener());
         createEnemies();
-        bindGraphics();
         initKeyMappings(loadingStrategy.getPlayer());
+    }
+
+    private GameListener setupListener() {
+        var listener = new CompositeListener();
+        listener.addListener(new GraphicsListener(gdxGameGraphics));
+        return listener;
     }
 
     private void createEnemies() {
@@ -54,13 +61,6 @@ public class GameDesktopLauncher implements ApplicationListener {
             var controller = new RandomEntityController();
             inputController.addEntityController(tank, controller);
             gameEngine.addEntity(tank);
-            gdxGameGraphics.addEntity(tank);
-        }
-    }
-
-    private void bindGraphics() {
-        for (var entity : loadingStrategy.getEntities()) {
-            gdxGameGraphics.addEntity(entity);
         }
     }
 

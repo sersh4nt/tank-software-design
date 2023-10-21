@@ -1,7 +1,6 @@
 package ru.mipt.bit.platformer.game;
 
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.game.entity.Entity;
 
 import static org.mockito.Mockito.*;
 

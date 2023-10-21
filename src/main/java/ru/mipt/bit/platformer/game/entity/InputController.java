@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.Gdx;
 import ru.mipt.bit.platformer.game.Command;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.commands.EntityController;
 
 import java.util.AbstractMap;

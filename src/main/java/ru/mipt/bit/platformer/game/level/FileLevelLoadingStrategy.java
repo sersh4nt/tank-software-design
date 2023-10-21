@@ -2,8 +2,9 @@ package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
-import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 
@@ -27,7 +28,7 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
     }
 
     @Override
-    public GameEngine loadLevel() {
+    public GameEngine loadLevel(GameListener listener) {
         try {
             fileContent = readFileContent();
         } catch (FileNotFoundException e) {
@@ -35,7 +36,7 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
             return null;
         }
 
-        var gameEngine = new GameEngine(fileContent.get(0).length(), fileContent.size());
+        var gameEngine = new GameEngine(fileContent.get(0).length(), fileContent.size(), listener);
 
         generatePlayer(gameEngine);
         generateObstacles(gameEngine);

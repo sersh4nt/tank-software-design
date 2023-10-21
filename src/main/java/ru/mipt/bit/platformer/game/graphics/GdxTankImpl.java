@@ -7,15 +7,14 @@ import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxTankImpl implements Renderable {
-    private final static String TEXTURE_NAME = "images/tank_blue.png";
     private final Tank tank;
     private final TileMovement tileMovement;
     private final GdxTexture texture;
 
-    public GdxTankImpl(Tank tank, TileMovement tileMovement) {
+    public GdxTankImpl(Tank tank, TileMovement tileMovement, String textureName) {
         this.tank = tank;
         this.tileMovement = tileMovement;
-        texture = new GdxTexture(TEXTURE_NAME);
+        texture = new GdxTexture(textureName);
     }
 
     @Override

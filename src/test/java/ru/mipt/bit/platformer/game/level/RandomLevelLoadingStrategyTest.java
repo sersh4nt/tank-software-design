@@ -2,8 +2,8 @@ package ru.mipt.bit.platformer.game.level;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.game.entity.Collidable;
-import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.Collidable;
+import ru.mipt.bit.platformer.game.Entity;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,12 +22,12 @@ class RandomLevelLoadingStrategyTest {
 
     @Test
     void loadLevel() {
-        assertNotNull(ls.loadLevel());
+        assertNotNull(ls.loadLevel(null));
     }
 
     @Test
     void getPlayer() {
-        ls.loadLevel();
+        ls.loadLevel(null);
 
         assertNotNull(ls.getPlayer());
         assertEntityIsInLevelBounds(ls.getPlayer());
@@ -35,7 +35,7 @@ class RandomLevelLoadingStrategyTest {
 
     @Test
     void getEntities() {
-        ls.loadLevel();
+        ls.loadLevel(null);
 
         assertNotNull(ls.getEntities());
         ls.getEntities().forEach(this::assertEntityIsInLevelBounds);

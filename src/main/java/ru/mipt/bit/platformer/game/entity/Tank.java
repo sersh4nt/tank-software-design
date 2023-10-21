@@ -1,7 +1,10 @@
 package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.game.Collidable;
 import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.Entity;
+import ru.mipt.bit.platformer.game.Movable;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;

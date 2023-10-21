@@ -2,8 +2,9 @@ package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
-import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 
@@ -24,8 +25,8 @@ public class RandomLevelLoadingStrategy implements LevelLoadingStrategy {
     }
 
     @Override
-    public GameEngine loadLevel() {
-        var gameEngine = new GameEngine(width, height);
+    public GameEngine loadLevel(GameListener listener) {
+        var gameEngine = new GameEngine(width, height, listener);
         generatePlayer(gameEngine);
         generateObstacles(gameEngine);
         return gameEngine;

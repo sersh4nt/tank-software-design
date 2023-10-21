@@ -2,7 +2,7 @@ package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.Test;
-import ru.mipt.bit.platformer.game.entity.Collidable;
+import ru.mipt.bit.platformer.game.Collidable;
 
 import java.util.Arrays;
 
@@ -33,7 +33,7 @@ class FileLevelLoadingStrategyTest {
         ).toArray();
         FileLevelLoadingStrategy ls = new FileLevelLoadingStrategy("map.txt");
 
-        ls.loadLevel();
+        ls.loadLevel(null);
 
         var loadedObstacles = ls.getEntities().stream().map(e -> ((Collidable) e).getCoordinates()).toArray();
         assertEquals(playerPosition, ls.getPlayer().getCoordinates());

@@ -8,7 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import ru.mipt.bit.platformer.game.entity.Entity;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
@@ -65,7 +65,7 @@ public class GdxGameGraphics {
             return new GdxTreeImpl(obstacle, groundLayer);
         }
         if (entity instanceof Tank tank) {
-            return new GdxTankImpl(tank, tileMovement);
+            return new GdxTankImpl(tank, tileMovement, "images/tank_blue.png");
         }
         return null;
     }
