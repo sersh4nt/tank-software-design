@@ -2,7 +2,6 @@ package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
-import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
@@ -15,15 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
+public class FileLevelGenerator implements LevelGenerator {
     private static final char TREE = 'T';
     private static final char PLAYER = 'X';
     private final String filename;
-    private final List<Entity> entities = new ArrayList<>();
-    private Tank player = null;
     private List<String> fileContent = null;
 
-    public FileLevelLoadingStrategy(String filename) {
+    public FileLevelGenerator(String filename) {
         this.filename = filename;
     }
 
@@ -46,28 +43,16 @@ public class FileLevelLoadingStrategy implements LevelLoadingStrategy {
 
     private void generatePlayer(GameEngine gameEngine) {
         var playerPosition = getCharPositions(fileContent, PLAYER).get(0);
-        player = new Tank(playerPosition, Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
-        gameEngine.addEntity(player);
-        entities.add(player);
+        var player = new Tank(playerPosition, Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
+        gameEngine.setPlayer(player);
     }
 
     private void generateObstacles(GameEngine gameEngine) {
         var obstaclePositions = getCharPositions(fileContent, TREE);
         for (var position : obstaclePositions) {
             var obstacle = new Obstacle(position);
-            entities.add(obstacle);
-            gameEngine.addEntity(obstacle);
+            gameEngine.addObstacle(obstacle);
         }
-    }
-
-    @Override
-    public Tank getPlayer() {
-        return player;
-    }
-
-    @Override
-    public List<Entity> getEntities() {
-        return entities;
     }
 
     private List<String> readFileContent() throws FileNotFoundException {

@@ -75,5 +75,6 @@ public class GdxGameGraphics {
             renderable.dispose();
         }
         level.dispose();
+        batch.dispose();
     }
 }

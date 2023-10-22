@@ -9,12 +9,11 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileLevelLoadingStrategyTest {
+class FileLevelGeneratorTest {
     @Test
     void loadLevel() {
         var playerPosition = new GridPoint2(5, 4);
         var obstacles = Arrays.asList(
-                new GridPoint2(5, 4),
                 new GridPoint2(3, 0),
                 new GridPoint2(6, 0),
                 new GridPoint2(2, 1),
@@ -31,12 +30,12 @@ class FileLevelLoadingStrategyTest {
                 new GridPoint2(6, 3),
                 new GridPoint2(9, 3)
         ).toArray();
-        FileLevelLoadingStrategy ls = new FileLevelLoadingStrategy("map.txt");
+        FileLevelGenerator ls = new FileLevelGenerator("map.txt");
 
-        ls.loadLevel(null);
+        var engine = ls.loadLevel(null);
 
-        var loadedObstacles = ls.getEntities().stream().map(e -> ((Collidable) e).getCoordinates()).toArray();
-        assertEquals(playerPosition, ls.getPlayer().getCoordinates());
+        var loadedObstacles = engine.getObstacles().stream().map(e -> ((Collidable) e).getCoordinates()).toArray();
+        assertEquals(playerPosition, ((Collidable) engine.getPlayer()).getCoordinates());
         assertArrayEquals(obstacles, loadedObstacles);
     }
 }

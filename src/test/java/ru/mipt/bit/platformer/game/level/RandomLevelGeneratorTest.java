@@ -8,8 +8,8 @@ import ru.mipt.bit.platformer.game.Entity;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class RandomLevelLoadingStrategyTest {
-    private LevelLoadingStrategy ls;
+class RandomLevelGeneratorTest {
+    private LevelGenerator ls;
     private int width;
     private int height;
 
@@ -17,7 +17,7 @@ class RandomLevelLoadingStrategyTest {
     void setUp() {
         width = 10;
         height = 8;
-        ls = new RandomLevelLoadingStrategy(width, height);
+        ls = new RandomLevelGenerator(width, height);
     }
 
     @Test
@@ -27,18 +27,18 @@ class RandomLevelLoadingStrategyTest {
 
     @Test
     void getPlayer() {
-        ls.loadLevel(null);
+        var engine = ls.loadLevel(null);
 
-        assertNotNull(ls.getPlayer());
-        assertEntityIsInLevelBounds(ls.getPlayer());
+        assertNotNull(engine.getPlayer());
+        assertEntityIsInLevelBounds(engine.getPlayer());
     }
 
     @Test
     void getEntities() {
-        ls.loadLevel(null);
+        var engine = ls.loadLevel(null);
 
-        assertNotNull(ls.getEntities());
-        ls.getEntities().forEach(this::assertEntityIsInLevelBounds);
+        assertNotNull(engine.getObstacles());
+        engine.getObstacles().forEach(this::assertEntityIsInLevelBounds);
     }
 
     private void assertEntityIsInLevelBounds(Entity entity) {

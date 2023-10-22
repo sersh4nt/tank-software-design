@@ -2,7 +2,6 @@ package ru.mipt.bit.platformer.game.level;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
-import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
@@ -12,14 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomLevelLoadingStrategy implements LevelLoadingStrategy {
+public class RandomLevelGenerator implements LevelGenerator {
     private final Random random = new Random();
     private final int width;
     private final int height;
-    private final List<Entity> entities = new ArrayList<>();
-    private Tank player = null;
 
-    public RandomLevelLoadingStrategy(int width, int height) {
+    public RandomLevelGenerator(int width, int height) {
         this.width = width;
         this.height = height;
     }
@@ -27,34 +24,23 @@ public class RandomLevelLoadingStrategy implements LevelLoadingStrategy {
     @Override
     public GameEngine loadLevel(GameListener listener) {
         var gameEngine = new GameEngine(width, height, listener);
-        generatePlayer(gameEngine);
-        generateObstacles(gameEngine);
+        var player = generatePlayer(gameEngine);
+        generateObstacles(gameEngine, player);
         return gameEngine;
     }
 
-    @Override
-    public Tank getPlayer() {
+    private Tank generatePlayer(GameEngine gameEngine) {
+        var playerPosition = generateRandomPosition();
+        var player = new Tank(playerPosition, Direction.RIGHT, 0.4f);
+        gameEngine.setPlayer(player);
         return player;
     }
 
-    @Override
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-    private void generatePlayer(GameEngine gameEngine) {
-        var playerPosition = generateRandomPosition();
-        player = new Tank(playerPosition, Direction.RIGHT, 0.4f);
-        gameEngine.addEntity(player);
-        entities.add(player);
-    }
-
-    private void generateObstacles(GameEngine gameEngine) {
+    private void generateObstacles(GameEngine gameEngine, Tank player) {
         var obstaclePositions = generateObstaclePositions(player.getCoordinates());
         for (var position : obstaclePositions) {
             var obstacle = new Obstacle(position);
-            entities.add(obstacle);
-            gameEngine.addEntity(obstacle);
+            gameEngine.addObstacle(obstacle);
         }
     }
 

@@ -1,13 +1,12 @@
-package ru.mipt.bit.platformer.game.listener;
+package ru.mipt.bit.platformer.game.graphics;
 
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameListener;
-import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
 
-public class GraphicsListener implements GameListener {
+public class GdxGraphicsListener implements GameListener {
     private final GdxGameGraphics graphics;
 
-    public GraphicsListener(GdxGameGraphics graphics) {
+    public GdxGraphicsListener(GdxGameGraphics graphics) {
         this.graphics = graphics;
     }
 
