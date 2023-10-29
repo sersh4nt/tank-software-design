@@ -43,7 +43,7 @@ public class FileLevelGenerator implements LevelGenerator {
 
     private void generatePlayer(GameEngine gameEngine) {
         var playerPosition = getCharPositions(fileContent, PLAYER).get(0);
-        var player = new Tank(playerPosition, Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
+        var player = new Tank(playerPosition, Direction.RIGHT, 1f, 100f, 1000f, gameEngine.getCollisionHandler());
         gameEngine.setPlayer(player);
     }
 
@@ -51,7 +51,7 @@ public class FileLevelGenerator implements LevelGenerator {
         var obstaclePositions = getCharPositions(fileContent, TREE);
         for (var position : obstaclePositions) {
             var obstacle = new Obstacle(position);
-            gameEngine.addObstacle(obstacle);
+            gameEngine.addEntity(obstacle);
         }
     }
 

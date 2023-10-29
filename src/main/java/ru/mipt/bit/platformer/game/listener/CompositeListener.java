@@ -17,4 +17,9 @@ public class CompositeListener implements GameListener {
     public void onEntityAdded(Entity entity) {
         listeners.forEach(listener -> listener.onEntityAdded(entity));
     }
+
+    @Override
+    public void onEntityRemoved(Entity entity) {
+        listeners.forEach(listener -> listener.onEntityRemoved(entity));
+    }
 }

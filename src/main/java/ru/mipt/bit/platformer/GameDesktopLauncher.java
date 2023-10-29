@@ -4,13 +4,13 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.GridPoint2;
-import org.awesome.ai.strategy.NotRecommendingAI;
 import ru.mipt.bit.platformer.game.Direction;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.commands.EntityController;
-import ru.mipt.bit.platformer.game.commands.MegaAIAdapterController;
 import ru.mipt.bit.platformer.game.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.commands.RandomEntityController;
+import ru.mipt.bit.platformer.game.commands.ShootCommand;
 import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
@@ -41,7 +41,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     public void create() {
         gdxGameGraphics = new GdxGameGraphics("level.tmx");
 
-        entityController = new MegaAIAdapterController(new NotRecommendingAI());
+        entityController = new RandomEntityController();
 //        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
         LevelGenerator loadingStrategy = new FileLevelGenerator("map.txt");
         var listener = setupListener();
@@ -60,8 +60,8 @@ public class GameDesktopLauncher implements ApplicationListener {
     private void createEnemies() {
         var mx = new Random().nextInt(1, 5);
         for (int i = 0; i < mx; i++) {
-            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
-            gameEngine.addEnemy(tank);
+            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, 1f, 100f, 1000f, gameEngine.getCollisionHandler());
+            gameEngine.addEntity(tank);
         }
     }
 
@@ -75,14 +75,20 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController.addMapping(S, player, new MoveCommand(Direction.DOWN));
         inputController.addMapping(RIGHT, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(D, player, new MoveCommand(Direction.RIGHT));
+        inputController.addMapping(SPACE, player, new ShootCommand());
     }
 
     @Override
     public void render() {
         float deltaTime = gdxGameGraphics.getDeltaTime();
-        entityController.getCommands(gameEngine).forEach((k, v) -> v.apply(k));
+
+        var commands = entityController.getCommands(gameEngine);
+
+        commands.forEach((k, v) -> v.apply(k));
         inputController.applyCommands();
+
         gameEngine.updateGameState(deltaTime);
+
         gdxGameGraphics.render();
     }
 

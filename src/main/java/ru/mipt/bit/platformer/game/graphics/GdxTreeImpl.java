@@ -21,6 +21,6 @@ public class GdxTreeImpl implements Renderable {
 
     @Override
     public void dispose() {
-        texture.getTexture().dispose();
+        texture.dispose();
     }
 }

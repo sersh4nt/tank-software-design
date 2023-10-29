@@ -1,26 +1,27 @@
 package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
-public class GdxTankImpl implements Renderable {
-    private final Tank tank;
+
+public class GdxBulletImpl implements Renderable {
+    private final Bullet bullet;
     private final TileMovement tileMovement;
     private final GdxTexture texture;
 
-    public GdxTankImpl(Tank tank, TileMovement tileMovement, String textureName) {
-        this.tank = tank;
+    public GdxBulletImpl(Bullet bullet, TileMovement tileMovement, String textureName) {
+        this.bullet = bullet;
         this.tileMovement = tileMovement;
         texture = new GdxTexture(textureName);
     }
 
     @Override
     public void render(Batch batch) {
-        tileMovement.moveRectangleBetweenTileCenters(texture.getRectangle(), tank.getCoordinates(), tank.getDestinationCoordinates(), tank.getMovementProgress());
-        drawTextureRegionUnscaled(batch, texture.getTextureRegion(), texture.getRectangle(), tank.getDirection().getRotation());
+        tileMovement.moveRectangleBetweenTileCenters(texture.getRectangle(), bullet.getCoordinates(), bullet.getDestinationCoordinates(), bullet.getMovementProgress());
+        drawTextureRegionUnscaled(batch, texture.getTextureRegion(), texture.getRectangle(), bullet.getDirection().getRotation());
     }
 
     @Override

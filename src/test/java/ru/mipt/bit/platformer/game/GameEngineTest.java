@@ -12,7 +12,7 @@ class GameEngineTest {
         Entity entity = mock(Entity.class);
         var engine = new GameEngine();
 
-        engine.addObstacle(entity);
+        engine.addEntity(entity);
         engine.updateGameState(deltaTime);
 
         verify(entity, times(1)).updateState(deltaTime);
@@ -25,7 +25,7 @@ class GameEngineTest {
         Entity entity = mock(Entity.class);
         var engine = new GameEngine();
 
-        engine.addObstacle(entity);
+        engine.addEntity(entity);
 
         verify(entity, times(0)).updateState(deltaTime);
     }

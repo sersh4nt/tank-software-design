@@ -31,7 +31,7 @@ public class RandomLevelGenerator implements LevelGenerator {
 
     private Tank generatePlayer(GameEngine gameEngine) {
         var playerPosition = generateRandomPosition();
-        var player = new Tank(playerPosition, Direction.RIGHT, 0.4f);
+        var player = new Tank(playerPosition, Direction.RIGHT, 1f, 100f, 1000f);
         gameEngine.setPlayer(player);
         return player;
     }
@@ -40,7 +40,7 @@ public class RandomLevelGenerator implements LevelGenerator {
         var obstaclePositions = generateObstaclePositions(player.getCoordinates());
         for (var position : obstaclePositions) {
             var obstacle = new Obstacle(position);
-            gameEngine.addObstacle(obstacle);
+            gameEngine.addEntity(obstacle);
         }
     }
 

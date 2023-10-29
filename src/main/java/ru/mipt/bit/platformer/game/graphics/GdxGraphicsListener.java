@@ -14,4 +14,9 @@ public class GdxGraphicsListener implements GameListener {
     public void onEntityAdded(Entity entity) {
         graphics.addEntity(entity);
     }
+
+    @Override
+    public void onEntityRemoved(Entity entity) {
+        graphics.removeEntity(entity);
+    }
 }

@@ -1,15 +1,20 @@
 package ru.mipt.bit.platformer.game;
 
 import ru.mipt.bit.platformer.game.entity.CollisionHandler;
+import ru.mipt.bit.platformer.game.entity.Obstacle;
+import ru.mipt.bit.platformer.game.entity.Tank;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GameEngine {
+    private static GameEngine gameEngine;
     private final CollisionHandler collisionHandler;
     private final GameListener listener;
-    private final List<Entity> obstacles = new ArrayList<>();
-    private final List<Entity> enemies = new ArrayList<>();
+    private final List<Entity> entities = new ArrayList<>();
+    private final Set<Entity> entitiesToRemove = new HashSet<>();
     private final int width;
     private final int height;
     private Entity player = null;
@@ -19,6 +24,7 @@ public class GameEngine {
         listener = null;
         width = 0;
         height = 0;
+        gameEngine = this;
     }
 
     public GameEngine(int width, int height, GameListener listener) {
@@ -26,6 +32,11 @@ public class GameEngine {
         this.listener = listener;
         this.width = width;
         this.height = height;
+        gameEngine = this;
+    }
+
+    public static GameEngine getInstance() {
+        return gameEngine;
     }
 
     public int getWidth() {
@@ -46,14 +57,23 @@ public class GameEngine {
     }
 
     public List<Entity> getObstacles() {
-        return obstacles;
+        var result = new ArrayList<Entity>();
+        entities.forEach(entity -> {
+            if (entity instanceof Obstacle) result.add(entity);
+        });
+        return result;
     }
 
     public List<Entity> getEnemies() {
-        return enemies;
+        var result = new ArrayList<Entity>();
+        entities.forEach(entity -> {
+            if (entity instanceof Tank && entity != player) result.add(entity);
+        });
+        return result;
     }
 
-    private void addEntity(Entity entity) {
+    public void addEntity(Entity entity) {
+        entities.add(entity);
         if (entity instanceof Collidable collidable) {
             collisionHandler.addCollidable(collidable);
         }
@@ -62,25 +82,40 @@ public class GameEngine {
         }
     }
 
-    public void addEnemy(Entity entity) {
-        enemies.add(entity);
-        addEntity(entity);
-    }
-
-    public void addObstacle(Entity entity) {
-        obstacles.add(entity);
-        addEntity(entity);
-    }
-
     public void updateGameState(float deltaTime) {
+        entitiesToRemove.clear();
+
         if (player != null) {
             player.updateState(deltaTime);
         }
-        obstacles.forEach(obstacle -> obstacle.updateState(deltaTime));
-        enemies.forEach(enemy -> enemy.updateState(deltaTime));
+        entities.forEach(entity -> entity.updateState(deltaTime));
+
+        removeEntities();
     }
 
     public CollisionHandler getCollisionHandler() {
         return collisionHandler;
+    }
+
+    public void removeEntity(Entity entity) {
+        entitiesToRemove.add(entity);
+    }
+
+    private void removeEntities() {
+        entitiesToRemove.forEach(entity -> {
+            entities.remove(entity);
+
+            if (player == entity) {
+                player = null;
+            }
+
+            if (entity instanceof Collidable collidable) {
+                collisionHandler.removeMovable(collidable);
+            }
+
+            if (listener != null) {
+                listener.onEntityRemoved(entity);
+            }
+        });
     }
 }

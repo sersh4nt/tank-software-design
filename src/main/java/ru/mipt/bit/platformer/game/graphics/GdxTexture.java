@@ -16,15 +16,15 @@ public class GdxTexture {
         rectangle = GdxGameUtils.createBoundingRectangle(textureRegion);
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
-
     public TextureRegion getTextureRegion() {
         return textureRegion;
     }
 
     public Rectangle getRectangle() {
         return rectangle;
+    }
+
+    public void dispose() {
+        texture.dispose();
     }
 }

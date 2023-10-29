@@ -10,7 +10,6 @@ import java.util.Set;
 
 public class CollisionHandler {
     private final List<Collidable> collidables = new ArrayList<>();
-    private final Set<GridPoint2> occupiedPoints = new HashSet<>();
     private int width = 0;
     private int height = 0;
 
@@ -26,23 +25,21 @@ public class CollisionHandler {
         collidables.add(collidable);
     }
 
-    private void updateField() {
-        occupiedPoints.clear();
+    public void removeMovable(Collidable collidable) {
+        collidables.remove(collidable);
+    }
+
+    public Set<Collidable> getCollidablesAt(GridPoint2 point) {
+        var result = new HashSet<Collidable>();
+        if (isOutside(point)) return result;
         for (var collidable : collidables) {
-            occupiedPoints.add(collidable.getCoordinates());
-            occupiedPoints.add(collidable.getDestinationCoordinates());
+            if (collidable.getDestinationCoordinates().equals(point)) result.add(collidable);
+            if (collidable.getCoordinates().equals(point)) result.add(collidable);
         }
+        return result;
     }
 
-    public boolean isOccupied(GridPoint2 point) {
-        updateField();
-        if (isOutside(point)) {
-            return true;
-        }
-        return occupiedPoints.contains(point);
-    }
-
-    private boolean isOutside(GridPoint2 point) {
+    public boolean isOutside(GridPoint2 point) {
         return point.x < 0 || point.y < 0 || point.x >= width || point.y >= height;
     }
 }

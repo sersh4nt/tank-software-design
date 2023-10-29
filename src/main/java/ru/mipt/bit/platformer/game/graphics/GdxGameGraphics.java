@@ -8,13 +8,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.utils.Disposable;
 import ru.mipt.bit.platformer.game.Entity;
+import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
@@ -22,7 +24,7 @@ import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLa
 
 public class GdxGameGraphics {
     private final Batch batch = new SpriteBatch();
-    private final List<Renderable> renderables = new ArrayList<>();
+    private final Map<Entity, Renderable> renderables = new HashMap<>();
     private final TileMovement tileMovement;
     private final TiledMap level;
     private final MapRenderer levelRenderer;
@@ -49,15 +51,18 @@ public class GdxGameGraphics {
         levelRenderer.render();
 
         batch.begin();
-        for (var i : renderables) {
-            i.render(batch);
-        }
+        renderables.values().forEach(renderable -> renderable.render(batch));
         batch.end();
     }
 
     public void addEntity(Entity entity) {
         var renderable = getRenderableFromEntity(entity);
-        renderables.add(renderable);
+        renderables.put(entity, renderable);
+    }
+
+    public void removeEntity(Entity entity) {
+        var renderable = renderables.remove(entity);
+        renderable.dispose();
     }
 
     private Renderable getRenderableFromEntity(Entity entity) {
@@ -67,13 +72,14 @@ public class GdxGameGraphics {
         if (entity instanceof Tank tank) {
             return new GdxTankImpl(tank, tileMovement, "images/tank_blue.png");
         }
+        if (entity instanceof Bullet bullet) {
+            return new GdxBulletImpl(bullet, tileMovement, "images/bullet.png");
+        }
         return null;
     }
 
     public void dispose() {
-        for (var renderable : renderables) {
-            renderable.dispose();
-        }
+        renderables.values().forEach(Disposable::dispose);
         level.dispose();
         batch.dispose();
     }

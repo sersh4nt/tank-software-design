@@ -18,15 +18,22 @@ public class RandomEntityController implements EntityController {
         var result = new HashMap<Entity, Command>();
         engine.getEnemies().forEach(enemy -> {
             var prev = previousCommands.getOrDefault(enemy, null);
-            if (prev != null && random.nextBoolean()) {
+            if (prev instanceof MoveCommand && random.nextBoolean()) {
                 result.put(enemy, prev);
                 return;
             }
-            var command = new MoveCommand(getRandomDirection());
+            var command = getRandomCommand();
             previousCommands.put(enemy, command);
             result.put(enemy, command);
         });
         return result;
+    }
+
+    private Command getRandomCommand() {
+        if (random.nextInt(5) == 0) {
+            return new ShootCommand();
+        }
+        return new MoveCommand(getRandomDirection());
     }
 
     private Direction getRandomDirection() {
