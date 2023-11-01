@@ -7,5 +7,8 @@ import ru.mipt.bit.platformer.game.GameEngine;
 import java.util.Map;
 
 public interface EntityController {
+    /*
+    port
+     */
     Map<Entity, Command> getCommands(GameEngine engine);
 }

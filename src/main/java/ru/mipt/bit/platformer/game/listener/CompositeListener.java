@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompositeListener implements GameListener {
+    /*
+    adapter
+     */
     private final List<GameListener> listeners = new ArrayList<>();
 
     public void addListener(GameListener listener) {

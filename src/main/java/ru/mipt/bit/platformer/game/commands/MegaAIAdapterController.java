@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 public class MegaAIAdapterController implements EntityController {
+    /*
+    adapter
+     */
     private final AIAdapter adapter = new AIAdapter();
     private final AI ai;
 

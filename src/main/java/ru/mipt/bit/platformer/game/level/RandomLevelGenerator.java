@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomLevelGenerator implements LevelGenerator {
+    /*
+    adapter
+     */
     private final Random random = new Random();
     private final int width;
     private final int height;

@@ -23,7 +23,10 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.createSingleLayerMapRenderer;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.getSingleLayer;
 
-public class GdxGameGraphics {
+public class GdxGameGraphics implements GameGraphics {
+    /*
+    adapter
+     */
     private final Batch batch = new SpriteBatch();
     private final Map<Entity, Renderable> renderables = new HashMap<>();
     private final TileMovement tileMovement;
@@ -44,10 +47,12 @@ public class GdxGameGraphics {
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
 
+    @Override
     public float getDeltaTime() {
         return Gdx.graphics.getDeltaTime();
     }
 
+    @Override
     public void render() {
         clearScreen();
         levelRenderer.render();
@@ -57,11 +62,13 @@ public class GdxGameGraphics {
         batch.end();
     }
 
+    @Override
     public void addEntity(Entity entity) {
         var renderable = getRenderableFromEntity(entity);
         renderables.put(entity, renderable);
     }
 
+    @Override
     public void removeEntity(Entity entity) {
         var renderable = renderables.remove(entity);
         renderable.dispose();
@@ -82,12 +89,14 @@ public class GdxGameGraphics {
         return renderable;
     }
 
+    @Override
     public void dispose() {
         renderables.values().forEach(Disposable::dispose);
         level.dispose();
         batch.dispose();
     }
 
+    @Override
     public void toggleRenderHealthbar() {
         renderHealthbar = !renderHealthbar;
         System.out.println("toggling healthbar rendering");

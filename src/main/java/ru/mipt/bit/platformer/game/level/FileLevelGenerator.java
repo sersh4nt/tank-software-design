@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FileLevelGenerator implements LevelGenerator {
+    /*
+    adapter
+     */
     private static final char TREE = 'T';
     private static final char PLAYER = 'X';
     private final String filename;

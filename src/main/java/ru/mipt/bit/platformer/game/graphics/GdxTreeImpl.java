@@ -7,6 +7,9 @@ import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils;
 
 public class GdxTreeImpl implements Renderable {
+    /*
+    adapter
+     */
     private final static String TEXTURE_NAME = "images/greenTree.png";
     private final Obstacle obstacle;
     private final GdxTexture texture;

@@ -8,6 +8,9 @@ import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTextureRegionUnscaled;
 
 public class GdxTankImpl implements Renderable {
+    /*
+    adapter
+     */
     private final Tank tank;
     private final TileMovement tileMovement;
     private final GdxTexture texture;

@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Disposable;
 import ru.mipt.bit.platformer.game.Entity;
 
 public interface Renderable extends Disposable {
+    /*
+    port
+     */
     void render(Batch batch);
 
     Entity getEntity();

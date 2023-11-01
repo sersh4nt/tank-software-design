@@ -6,6 +6,9 @@ import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.Movable;
 
 public class MoveCommand implements Command {
+    /*
+    adapter
+     */
     private final Direction direction;
 
     public MoveCommand(Direction direction) {

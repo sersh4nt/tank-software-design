@@ -3,10 +3,13 @@ package ru.mipt.bit.platformer.game.graphics;
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameListener;
 
-public class GdxGraphicsListener implements GameListener {
-    private final GdxGameGraphics graphics;
+public class GraphicsListener implements GameListener {
+    /*
+    adapter
+     */
+    private final GameGraphics graphics;
 
-    public GdxGraphicsListener(GdxGameGraphics graphics) {
+    public GraphicsListener(GameGraphics graphics) {
         this.graphics = graphics;
     }
 

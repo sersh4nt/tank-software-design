@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Random;
 
 public class RandomEntityController implements EntityController {
+    /*
+    adapter
+     */
     private final static Random random = new Random();
     private final Map<Entity, Command> previousCommands = new HashMap<>();
 

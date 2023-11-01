@@ -9,6 +9,9 @@ import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.drawTexture
 
 
 public class GdxBulletImpl implements Renderable {
+    /*
+    adapter
+     */
     private final Bullet bullet;
     private final TileMovement tileMovement;
     private final GdxTexture texture;

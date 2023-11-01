@@ -13,8 +13,9 @@ import ru.mipt.bit.platformer.game.commands.RandomEntityController;
 import ru.mipt.bit.platformer.game.commands.ShootCommand;
 import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.graphics.GameGraphics;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
-import ru.mipt.bit.platformer.game.graphics.GdxGraphicsListener;
+import ru.mipt.bit.platformer.game.graphics.GraphicsListener;
 import ru.mipt.bit.platformer.game.graphics.ToggleHealthbarCommand;
 import ru.mipt.bit.platformer.game.level.FileLevelGenerator;
 import ru.mipt.bit.platformer.game.level.LevelGenerator;
@@ -26,7 +27,7 @@ import static com.badlogic.gdx.Input.Keys.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private final InputController inputController = new InputController();
-    private GdxGameGraphics gameGraphics;
+    private GameGraphics gameGraphics;
     private GameEngine gameEngine;
     private EntityController entityController;
 
@@ -54,7 +55,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private GameListener setupListener() {
         var listener = new CompositeListener();
-        listener.addListener(new GdxGraphicsListener(gameGraphics));
+        listener.addListener(new GraphicsListener(gameGraphics));
         return listener;
     }
 

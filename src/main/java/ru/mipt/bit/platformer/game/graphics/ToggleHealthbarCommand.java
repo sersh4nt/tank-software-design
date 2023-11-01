@@ -4,9 +4,12 @@ import ru.mipt.bit.platformer.game.Command;
 import ru.mipt.bit.platformer.game.Entity;
 
 public class ToggleHealthbarCommand implements Command {
-    private final GdxGameGraphics graphics;
+    /*
+    adapter
+     */
+    private final GameGraphics graphics;
 
-    public ToggleHealthbarCommand(GdxGameGraphics graphics) {
+    public ToggleHealthbarCommand(GameGraphics graphics) {
         this.graphics = graphics;
     }
 
