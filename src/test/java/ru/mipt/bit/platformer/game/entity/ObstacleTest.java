@@ -11,7 +11,7 @@ class ObstacleTest {
 
     @BeforeEach
     void setUp() {
-        obstacle = new Obstacle(new GridPoint2(0, 0));
+        obstacle = new Obstacle(new GridPoint2(0, 0), null);
     }
 
     @Test

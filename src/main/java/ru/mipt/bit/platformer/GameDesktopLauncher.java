@@ -15,6 +15,7 @@ import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
 import ru.mipt.bit.platformer.game.graphics.GdxGraphicsListener;
+import ru.mipt.bit.platformer.game.graphics.ToggleHealthbarCommand;
 import ru.mipt.bit.platformer.game.level.FileLevelGenerator;
 import ru.mipt.bit.platformer.game.level.LevelGenerator;
 import ru.mipt.bit.platformer.game.listener.CompositeListener;
@@ -25,7 +26,7 @@ import static com.badlogic.gdx.Input.Keys.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
     private final InputController inputController = new InputController();
-    private GdxGameGraphics gdxGameGraphics;
+    private GdxGameGraphics gameGraphics;
     private GameEngine gameEngine;
     private EntityController entityController;
 
@@ -39,7 +40,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        gdxGameGraphics = new GdxGameGraphics("level.tmx");
+        gameGraphics = new GdxGameGraphics("level.tmx");
 
         entityController = new RandomEntityController();
 //        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
@@ -53,14 +54,14 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private GameListener setupListener() {
         var listener = new CompositeListener();
-        listener.addListener(new GdxGraphicsListener(gdxGameGraphics));
+        listener.addListener(new GdxGraphicsListener(gameGraphics));
         return listener;
     }
 
     private void createEnemies() {
         var mx = new Random().nextInt(1, 5);
         for (int i = 0; i < mx; i++) {
-            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, 1f, 100f, 1000f, gameEngine.getCollisionHandler());
+            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, 1f, 100f, 2f, gameEngine);
             gameEngine.addEntity(tank);
         }
     }
@@ -76,11 +77,12 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController.addMapping(RIGHT, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(D, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(SPACE, player, new ShootCommand());
+        inputController.addMapping(L, null, new ToggleHealthbarCommand());
     }
 
     @Override
     public void render() {
-        float deltaTime = gdxGameGraphics.getDeltaTime();
+        float deltaTime = gameGraphics.getDeltaTime();
 
         var commands = entityController.getCommands(gameEngine);
 
@@ -89,7 +91,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         gameEngine.updateGameState(deltaTime);
 
-        gdxGameGraphics.render();
+        gameGraphics.render();
     }
 
     @Override
@@ -109,6 +111,6 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gdxGameGraphics.dispose();
+        gameGraphics.dispose();
     }
 }

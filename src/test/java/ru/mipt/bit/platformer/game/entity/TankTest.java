@@ -14,7 +14,7 @@ class TankTest {
 
     @BeforeEach
     void setUp() {
-        tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f);
+        tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
     }
 
     @ParameterizedTest

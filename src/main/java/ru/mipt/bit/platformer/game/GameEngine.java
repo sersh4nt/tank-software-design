@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 public class GameEngine {
-    private static GameEngine gameEngine;
     private final CollisionHandler collisionHandler;
     private final GameListener listener;
     private final List<Entity> entities = new ArrayList<>();
@@ -24,7 +23,6 @@ public class GameEngine {
         listener = null;
         width = 0;
         height = 0;
-        gameEngine = this;
     }
 
     public GameEngine(int width, int height, GameListener listener) {
@@ -32,11 +30,6 @@ public class GameEngine {
         this.listener = listener;
         this.width = width;
         this.height = height;
-        gameEngine = this;
-    }
-
-    public static GameEngine getInstance() {
-        return gameEngine;
     }
 
     public int getWidth() {
@@ -110,7 +103,7 @@ public class GameEngine {
             }
 
             if (entity instanceof Collidable collidable) {
-                collisionHandler.removeMovable(collidable);
+                collisionHandler.removeCollidable(collidable);
             }
 
             if (listener != null) {

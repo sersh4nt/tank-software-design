@@ -4,22 +4,27 @@ import com.badlogic.gdx.math.GridPoint2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.GameEngine;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CollisionHandlerTest {
     private CollisionHandler collisionHandler;
+    private GameEngine gameEngine;
 
     @BeforeEach
     void setUp() {
         collisionHandler = new CollisionHandler(10, 8);
+        gameEngine = mock(GameEngine.class);
+        when(gameEngine.getCollisionHandler()).thenReturn(collisionHandler);
     }
 
     @Test
     void addCollidable() {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 0f, 1f, 1f, collisionHandler);
-        var obstacle = new Obstacle(new GridPoint2(1, 1));
+        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 0f, 1f, 1f, gameEngine);
+        var obstacle = new Obstacle(new GridPoint2(1, 1), gameEngine);
         collisionHandler.addCollidable(tank);
         collisionHandler.addCollidable(obstacle);
     }
@@ -27,14 +32,14 @@ class CollisionHandlerTest {
     @Test
     void tankPositionIsOccupied() {
         var initialPosition = new GridPoint2(0, 0);
-        var tank = new Tank(initialPosition, Direction.RIGHT, 0f, 1f, 1f, collisionHandler);
+        var tank = new Tank(initialPosition, Direction.RIGHT, 0f, 1f, 1f, gameEngine);
         collisionHandler.addCollidable(tank);
-        assertFalse(collisionHandler.getCollidablesAt(initialPosition).isEmpty());
+        assertNull(collisionHandler.checkCollisionAt(tank, initialPosition));
     }
 
     @Test
     void testPointIsOccupiedOutsideOfPlayfield() {
         var pt = new GridPoint2(-1, -1);
-        assertTrue(collisionHandler.getCollidablesAt(pt).isEmpty());
+        assertNull(collisionHandler.checkCollisionAt(null, pt));
     }
 }

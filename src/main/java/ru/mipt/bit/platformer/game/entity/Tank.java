@@ -12,31 +12,22 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
     private static final float MOVEMENT_STARTED = 0f;
     private final float movementSpeed;
     private final float reloadTime;
-    private long lastShootedAt = System.currentTimeMillis();
+    private final GameEngine gameEngine;
+    private float lastShootedAt = 0f;
     private float health;
-    private CollisionHandler collisionHandler = null;
     private GridPoint2 destinationCoordinates;
     private Direction direction;
     private GridPoint2 coordinates;
     private float movementProgress = MOVEMENT_COMPLETED;
 
-    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed, float health, float reloadTime) {
+    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed, float health, float reloadTime, GameEngine gameEngine) {
         this.coordinates = coordinates;
         this.direction = direction;
         this.movementSpeed = movementSpeed;
         destinationCoordinates = coordinates;
         this.health = health;
         this.reloadTime = reloadTime;
-    }
-
-    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed, float health, float reloadTime, CollisionHandler collisionHandler) {
-        this.coordinates = coordinates;
-        this.direction = direction;
-        this.movementSpeed = movementSpeed;
-        destinationCoordinates = coordinates;
-        this.health = health;
-        this.collisionHandler = collisionHandler;
-        this.reloadTime = reloadTime;
+        this.gameEngine = gameEngine;
     }
 
     public boolean isMoving() {
@@ -50,8 +41,9 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
         }
 
         var newDestination = direction.apply(coordinates);
+        var collisionHandler = gameEngine == null ? null : gameEngine.getCollisionHandler();
         if (collisionHandler == null
-                || collisionHandler.getCollidablesAt(newDestination).isEmpty()
+                || collisionHandler.checkCollisionAt(this, newDestination) == null
                 && !collisionHandler.isOutside(newDestination)) {
             movementProgress = MOVEMENT_STARTED;
             destinationCoordinates = newDestination;
@@ -67,6 +59,7 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
 
     @Override
     public void updateState(float deltaTime) {
+        lastShootedAt -= deltaTime;
         movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
         if (!isMoving()) {
             coordinates = destinationCoordinates;
@@ -92,23 +85,22 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
 
     @Override
     public void shoot() {
-        var currentTime = System.currentTimeMillis();
-        if (currentTime - lastShootedAt <= reloadTime) {
-            return;
-        }
+        if (!isAbleToShoot()) return;
 
-        var bullet = new Bullet(direction.apply(coordinates), direction, 20f, 5f, collisionHandler);
-        GameEngine.getInstance().addEntity(bullet);
-        lastShootedAt = currentTime;
+        var bullet = new Bullet(direction.apply(coordinates), direction, 20f, 5f, gameEngine);
+        gameEngine.addEntity(bullet);
+        lastShootedAt = reloadTime;
+    }
+
+    private boolean isAbleToShoot() {
+        return lastShootedAt <= 0;
     }
 
     @Override
     public void damage(float damage) {
         health -= damage;
-    }
-
-    @Override
-    public boolean isAlive() {
-        return health > 0;
+        if (health <= 0) {
+            gameEngine.removeEntity(this);
+        }
     }
 }
