@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
@@ -27,5 +28,10 @@ public class GdxBulletImpl implements Renderable {
     @Override
     public void dispose() {
         texture.dispose();
+    }
+
+    @Override
+    public Entity getEntity() {
+        return bullet;
     }
 }

@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
@@ -21,6 +22,11 @@ public class GdxTankImpl implements Renderable {
     public void render(Batch batch) {
         tileMovement.moveRectangleBetweenTileCenters(texture.getRectangle(), tank.getCoordinates(), tank.getDestinationCoordinates(), tank.getMovementProgress());
         drawTextureRegionUnscaled(batch, texture.getTextureRegion(), texture.getRectangle(), tank.getDirection().getRotation());
+    }
+
+    @Override
+    public Entity getEntity() {
+        return tank;
     }
 
     @Override

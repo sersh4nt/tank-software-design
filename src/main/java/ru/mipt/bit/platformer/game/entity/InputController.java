@@ -17,7 +17,7 @@ public class InputController {
 
     public void applyCommands() {
         for (Integer key : keyToEntityCommand.keySet()) {
-            if (Gdx.input.isKeyPressed(key)) {
+            if (Gdx.input.isKeyJustPressed(key)) {
                 var entity = keyToEntityCommand.get(key).getKey();
                 var command = keyToEntityCommand.get(key).getValue();
                 command.apply(entity);

@@ -13,6 +13,7 @@ import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.graphics.decorators.HealthRenderDecorator;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class GdxGameGraphics {
     private final TiledMap level;
     private final MapRenderer levelRenderer;
     private final TiledMapTileLayer groundLayer;
+    private boolean renderHealthbar = false;
 
     public GdxGameGraphics(String levelName) {
         level = new TmxMapLoader().load(levelName);
@@ -66,21 +68,32 @@ public class GdxGameGraphics {
     }
 
     private Renderable getRenderableFromEntity(Entity entity) {
+        Renderable renderable = null;
         if (entity instanceof Obstacle obstacle) {
-            return new GdxTreeImpl(obstacle, groundLayer);
+            renderable = new GdxTreeImpl(obstacle, groundLayer);
         }
         if (entity instanceof Tank tank) {
-            return new GdxTankImpl(tank, tileMovement, "images/tank_blue.png");
+            renderable = new GdxTankImpl(tank, tileMovement, "images/tank_blue.png");
         }
         if (entity instanceof Bullet bullet) {
-            return new GdxBulletImpl(bullet, tileMovement, "images/bullet.png");
+            renderable = new GdxBulletImpl(bullet, tileMovement, "images/bullet.png");
         }
-        return null;
+        renderable = new HealthRenderDecorator(renderable, this);
+        return renderable;
     }
 
     public void dispose() {
         renderables.values().forEach(Disposable::dispose);
         level.dispose();
         batch.dispose();
+    }
+
+    public void toggleRenderHealthbar() {
+        renderHealthbar = !renderHealthbar;
+        System.out.println("toggling healthbar rendering");
+    }
+
+    public boolean shouldRenderHealthbar() {
+        return renderHealthbar;
     }
 }

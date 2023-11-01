@@ -6,7 +6,14 @@ import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.Livable;
 
-public record Obstacle(GridPoint2 coordinates, GameEngine gameEngine) implements Entity, Collidable, Livable {
+public class Obstacle implements Entity, Collidable, Livable {
+    private final GridPoint2 coordinates;
+    private final GameEngine gameEngine;
+
+    public Obstacle(GridPoint2 coordinates, GameEngine gameEngine) {
+        this.coordinates = coordinates;
+        this.gameEngine = gameEngine;
+    }
 
     @Override
     public GridPoint2 getCoordinates() {

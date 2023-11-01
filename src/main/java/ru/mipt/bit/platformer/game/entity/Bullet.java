@@ -58,6 +58,10 @@ public class Bullet implements Entity, Collidable {
     }
 
     private boolean hasCollisionAt(GridPoint2 pt) {
+        if (gameEngine == null || gameEngine.getCollisionHandler() == null) {
+            return false;
+        }
+
         var collidedTo = gameEngine.getCollisionHandler().checkCollisionAt(this, pt);
         if (collidedTo == null) return false;
 

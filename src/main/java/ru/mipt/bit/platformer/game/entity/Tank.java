@@ -93,6 +93,8 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
     }
 
     private boolean isAbleToShoot() {
+        if (health <= 0) return false;
+
         return lastShootedAt <= 0;
     }
 
