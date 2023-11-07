@@ -5,4 +5,6 @@ public interface Livable {
     port
      */
     void damage(float damage);
+
+    float getRelativeHealth();
 }

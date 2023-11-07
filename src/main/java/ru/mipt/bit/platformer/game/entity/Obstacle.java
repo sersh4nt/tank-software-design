@@ -9,6 +9,7 @@ import ru.mipt.bit.platformer.game.Livable;
 public class Obstacle implements Entity, Collidable, Livable {
     private final GridPoint2 coordinates;
     private final GameEngine gameEngine;
+    private float health = 1f;
 
     public Obstacle(GridPoint2 coordinates, GameEngine gameEngine) {
         this.coordinates = coordinates;
@@ -32,5 +33,11 @@ public class Obstacle implements Entity, Collidable, Livable {
     @Override
     public void damage(float damage) {
         gameEngine.removeEntity(this);
+        health = 0f;
+    }
+
+    @Override
+    public float getRelativeHealth() {
+        return health;
     }
 }

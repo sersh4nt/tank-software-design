@@ -8,13 +8,20 @@ public class ToggleHealthbarCommand implements Command {
     adapter
      */
     private final GameGraphics graphics;
+    private final float delaySeconds;
+    private long lastUsedAt = System.currentTimeMillis();
 
-    public ToggleHealthbarCommand(GameGraphics graphics) {
+    public ToggleHealthbarCommand(GameGraphics graphics, float delaySeconds) {
         this.graphics = graphics;
+        this.delaySeconds = delaySeconds;
     }
 
     @Override
     public void apply(Entity entity) {
-        graphics.toggleRenderHealthbar();
+        var currentTime = System.currentTimeMillis();
+        if (currentTime - lastUsedAt >= delaySeconds * 1000) {
+            lastUsedAt = currentTime;
+            graphics.toggleRenderHealthbar();
+        }
     }
 }

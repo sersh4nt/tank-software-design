@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
@@ -35,5 +36,10 @@ public class GdxTankImpl implements Renderable {
     @Override
     public void dispose() {
         texture.dispose();
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return texture.getRectangle();
     }
 }

@@ -1,6 +1,7 @@
 package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
@@ -36,5 +37,10 @@ public class GdxBulletImpl implements Renderable {
     @Override
     public Entity getEntity() {
         return bullet;
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return texture.getRectangle();
     }
 }

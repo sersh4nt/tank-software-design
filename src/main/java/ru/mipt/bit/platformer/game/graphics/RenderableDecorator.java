@@ -1,8 +1,8 @@
-package ru.mipt.bit.platformer.game.graphics.decorators;
+package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.Entity;
-import ru.mipt.bit.platformer.game.graphics.Renderable;
 
 public class RenderableDecorator implements Renderable {
     protected Renderable wrappee;
@@ -19,6 +19,11 @@ public class RenderableDecorator implements Renderable {
     @Override
     public Entity getEntity() {
         return wrappee.getEntity();
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return wrappee.getRectangle();
     }
 
     @Override

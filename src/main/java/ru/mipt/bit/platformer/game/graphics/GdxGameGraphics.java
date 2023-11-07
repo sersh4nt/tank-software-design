@@ -13,7 +13,6 @@ import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Bullet;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
-import ru.mipt.bit.platformer.game.graphics.decorators.HealthRenderDecorator;
 import ru.mipt.bit.platformer.game.graphics.util.TileMovement;
 
 import java.util.HashMap;
@@ -85,7 +84,7 @@ public class GdxGameGraphics implements GameGraphics {
         if (entity instanceof Bullet bullet) {
             renderable = new GdxBulletImpl(bullet, tileMovement, "images/bullet.png");
         }
-        renderable = new HealthRenderDecorator(renderable, this);
+        renderable = new GdxHealthRenderDecorator(renderable, this);
         return renderable;
     }
 

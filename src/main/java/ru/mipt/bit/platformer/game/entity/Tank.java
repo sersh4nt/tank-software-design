@@ -13,6 +13,7 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
     private final float movementSpeed;
     private final float reloadTime;
     private final GameEngine gameEngine;
+    private final float initialHealth;
     private float lastShootedAt = 0f;
     private float health;
     private GridPoint2 destinationCoordinates;
@@ -26,6 +27,7 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
         this.movementSpeed = movementSpeed;
         destinationCoordinates = coordinates;
         this.health = health;
+        initialHealth = health;
         this.reloadTime = reloadTime;
         this.gameEngine = gameEngine;
     }
@@ -104,5 +106,10 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
         if (health <= 0) {
             gameEngine.removeEntity(this);
         }
+    }
+
+    @Override
+    public float getRelativeHealth() {
+        return health / initialHealth;
     }
 }

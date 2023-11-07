@@ -78,7 +78,7 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController.addMapping(RIGHT, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(D, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(SPACE, player, new ShootCommand());
-        inputController.addMapping(L, null, new ToggleHealthbarCommand(gameGraphics));
+        inputController.addMapping(L, null, new ToggleHealthbarCommand(gameGraphics, 1f));
     }
 
     @Override

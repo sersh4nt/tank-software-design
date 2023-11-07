@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.game.graphics;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils;
@@ -33,5 +34,10 @@ public class GdxTreeImpl implements Renderable {
     @Override
     public void dispose() {
         texture.dispose();
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return texture.getRectangle();
     }
 }
