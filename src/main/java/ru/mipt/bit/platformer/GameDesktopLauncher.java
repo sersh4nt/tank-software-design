@@ -13,6 +13,7 @@ import ru.mipt.bit.platformer.game.commands.RandomEntityController;
 import ru.mipt.bit.platformer.game.commands.ShootCommand;
 import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.entity.state.LightTankState;
 import ru.mipt.bit.platformer.game.graphics.GameGraphics;
 import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
 import ru.mipt.bit.platformer.game.graphics.GraphicsListener;
@@ -62,7 +63,7 @@ public class GameDesktopLauncher implements ApplicationListener {
     private void createEnemies() {
         var mx = new Random().nextInt(1, 5);
         for (int i = 0; i < mx; i++) {
-            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, 1f, 100f, 2f, gameEngine);
+            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, new LightTankState(2f, 100f, 100f, 1f), gameEngine);
             gameEngine.addEntity(tank);
         }
     }

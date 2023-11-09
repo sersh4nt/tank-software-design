@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.*;
+import ru.mipt.bit.platformer.game.entity.state.TankState;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continueProgress;
@@ -10,26 +11,19 @@ import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continuePro
 public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
     private static final float MOVEMENT_COMPLETED = 1f;
     private static final float MOVEMENT_STARTED = 0f;
-    private final float movementSpeed;
-    private final float reloadTime;
     private final GameEngine gameEngine;
-    private final float initialHealth;
-    private float lastShootedAt = 0f;
-    private float health;
+    private TankState state;
     private GridPoint2 destinationCoordinates;
     private Direction direction;
     private GridPoint2 coordinates;
     private float movementProgress = MOVEMENT_COMPLETED;
 
-    public Tank(GridPoint2 coordinates, Direction direction, float movementSpeed, float health, float reloadTime, GameEngine gameEngine) {
+    public Tank(GridPoint2 coordinates, Direction direction, TankState state, GameEngine gameEngine) {
         this.coordinates = coordinates;
         this.direction = direction;
-        this.movementSpeed = movementSpeed;
         destinationCoordinates = coordinates;
-        this.health = health;
-        initialHealth = health;
-        this.reloadTime = reloadTime;
         this.gameEngine = gameEngine;
+        this.state = state;
     }
 
     public boolean isMoving() {
@@ -61,8 +55,9 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
 
     @Override
     public void updateState(float deltaTime) {
-        lastShootedAt -= deltaTime;
-        movementProgress = continueProgress(movementProgress, deltaTime, movementSpeed);
+        state = state.updateState(deltaTime);
+
+        movementProgress = continueProgress(movementProgress, deltaTime, state.getMovementSpeed());
         if (!isMoving()) {
             coordinates = destinationCoordinates;
         }
@@ -87,29 +82,25 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
 
     @Override
     public void shoot() {
-        if (!isAbleToShoot()) return;
+        if (!state.isAbleToShoot()) {
+            return;
+        }
 
+        state.shoot();
         var bullet = new Bullet(direction.apply(coordinates), direction, 20f, 5f, gameEngine);
         gameEngine.addEntity(bullet);
-        lastShootedAt = reloadTime;
-    }
-
-    private boolean isAbleToShoot() {
-        if (health <= 0) return false;
-
-        return lastShootedAt <= 0;
     }
 
     @Override
     public void damage(float damage) {
-        health -= damage;
-        if (health <= 0) {
+        state.damage(damage);
+        if (state.getRelativeHealth() <= 0f) {
             gameEngine.removeEntity(this);
         }
     }
 
     @Override
     public float getRelativeHealth() {
-        return health / initialHealth;
+        return state.getRelativeHealth();
     }
 }

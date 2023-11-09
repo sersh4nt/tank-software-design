@@ -6,6 +6,7 @@ import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.entity.state.LightTankState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class RandomLevelGenerator implements LevelGenerator {
 
     private Tank generatePlayer(GameEngine gameEngine) {
         var playerPosition = generateRandomPosition();
-        var player = new Tank(playerPosition, Direction.RIGHT, 1f, 100f, 2f, gameEngine);
+        var player = new Tank(playerPosition, Direction.RIGHT, new LightTankState(2f, 100f, 100f, 1f), gameEngine);
         gameEngine.setPlayer(player);
         return player;
     }

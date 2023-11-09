@@ -6,6 +6,7 @@ import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.entity.state.LightTankState;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +47,7 @@ public class FileLevelGenerator implements LevelGenerator {
 
     private void generatePlayer(GameEngine gameEngine) {
         var playerPosition = getCharPositions(fileContent, PLAYER).get(0);
-        var player = new Tank(playerPosition, Direction.RIGHT, 1f, 100f, 2f, gameEngine);
+        var player = new Tank(playerPosition, Direction.RIGHT, new LightTankState(2f, 100f, 100f, 1f), gameEngine);
         gameEngine.setPlayer(player);
     }
 
