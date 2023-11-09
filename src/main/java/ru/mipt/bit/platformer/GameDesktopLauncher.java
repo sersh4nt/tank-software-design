@@ -4,24 +4,35 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.commands.MoveCommand;
-import ru.mipt.bit.platformer.entity.Entity;
-import ru.mipt.bit.platformer.entity.Obstacle;
-import ru.mipt.bit.platformer.entity.Tank;
-import ru.mipt.bit.platformer.graphics.GdxGameGraphics;
-import ru.mipt.bit.platformer.graphics.GdxTankImpl;
-import ru.mipt.bit.platformer.graphics.GdxTexture;
-import ru.mipt.bit.platformer.graphics.GdxTreeImpl;
-import ru.mipt.bit.platformer.util.Direction;
-import ru.mipt.bit.platformer.util.GameEngine;
-import ru.mipt.bit.platformer.util.InputController;
+import ru.mipt.bit.platformer.game.Direction;
+import ru.mipt.bit.platformer.game.GameEngine;
+import ru.mipt.bit.platformer.game.GameListener;
+import ru.mipt.bit.platformer.game.commands.EntityController;
+import ru.mipt.bit.platformer.game.commands.MoveCommand;
+import ru.mipt.bit.platformer.game.commands.RandomEntityController;
+import ru.mipt.bit.platformer.game.commands.ShootCommand;
+import ru.mipt.bit.platformer.game.entity.CollisionHandler;
+import ru.mipt.bit.platformer.game.entity.InputController;
+import ru.mipt.bit.platformer.game.entity.Tank;
+import ru.mipt.bit.platformer.game.entity.state.LightTankState;
+import ru.mipt.bit.platformer.game.graphics.GameGraphics;
+import ru.mipt.bit.platformer.game.graphics.GdxGameGraphics;
+import ru.mipt.bit.platformer.game.graphics.GraphicsListener;
+import ru.mipt.bit.platformer.game.graphics.ToggleHealthbarCommand;
+import ru.mipt.bit.platformer.game.level.FileLevelGenerator;
+import ru.mipt.bit.platformer.game.level.LevelGenerator;
+import ru.mipt.bit.platformer.game.listener.CompositeListener;
+
+import java.util.Random;
+import java.util.stream.Stream;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class GameDesktopLauncher implements ApplicationListener {
-    private GdxGameGraphics gdxGameGraphics;
+    private final InputController inputController = new InputController();
+    private GameGraphics gameGraphics;
     private GameEngine gameEngine;
-    private InputController inputController;
+    private EntityController entityController;
 
 
     public static void main(String[] args) {
@@ -33,30 +44,38 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void create() {
-        gameEngine = new GameEngine();
-        gdxGameGraphics = new GdxGameGraphics("level.tmx");
-
-        createPlayer();
-        createObstacles();
+        gameGraphics = new GdxGameGraphics("level.tmx");
+        entityController = new RandomEntityController();
+        loadLevel();
+        initKeyMappings();
     }
 
-    private void createObstacles() {
-        var obstacle = new Obstacle(new GridPoint2(1, 3));
-        gameEngine.addEntity(obstacle);
-        var obstacleTexture = new GdxTexture("images/greenTree.png");
-        gdxGameGraphics.addRenderable(new GdxTreeImpl(obstacle, obstacleTexture, gdxGameGraphics.getGroundLayer()));
+    private void loadLevel() {
+//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
+        LevelGenerator loadingStrategy = new FileLevelGenerator("map.txt");
+        var collisionHandler = new CollisionHandler();
+        var listener = setupListener(collisionHandler);
+        gameEngine = loadingStrategy.loadLevel(collisionHandler, listener);
+        createEnemies();
     }
 
-    private void createPlayer() {
-        var player = new Tank(new GridPoint2(1, 1), Direction.RIGHT, 0.4f, gameEngine.getCollisionHandler());
-        gameEngine.addEntity(player);
-        var playerTexture = new GdxTexture("images/tank_blue.png");
-        gdxGameGraphics.addRenderable(new GdxTankImpl(player, playerTexture, gdxGameGraphics.getTileMovement()));
-        initKeyMappings(player);
+    private GameListener setupListener(GameListener... listeners) {
+        var listener = new CompositeListener();
+        listener.addListener(new GraphicsListener(gameGraphics));
+        Stream.of(listeners).forEach(listener::addListener);
+        return listener;
     }
 
-    private void initKeyMappings(Entity player) {
-        inputController = new InputController();
+    private void createEnemies() {
+        var mx = new Random().nextInt(1, 5);
+        for (int i = 0; i < mx; i++) {
+            var tank = new Tank(new GridPoint2(0, i + 2), Direction.RIGHT, new LightTankState(2f, 100f, 100f, 1f), gameEngine);
+            gameEngine.addEntity(tank);
+        }
+    }
+
+    private void initKeyMappings() {
+        var player = gameEngine.getPlayer();
         inputController.addMapping(UP, player, new MoveCommand(Direction.UP));
         inputController.addMapping(W, player, new MoveCommand(Direction.UP));
         inputController.addMapping(LEFT, player, new MoveCommand(Direction.LEFT));
@@ -65,14 +84,22 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController.addMapping(S, player, new MoveCommand(Direction.DOWN));
         inputController.addMapping(RIGHT, player, new MoveCommand(Direction.RIGHT));
         inputController.addMapping(D, player, new MoveCommand(Direction.RIGHT));
+        inputController.addMapping(SPACE, player, new ShootCommand());
+        inputController.addMapping(L, null, new ToggleHealthbarCommand(gameGraphics, 1f));
     }
 
     @Override
     public void render() {
-        float deltaTime = gdxGameGraphics.getDeltaTime();
+        float deltaTime = gameGraphics.getDeltaTime();
+
+        var commands = entityController.getCommands(gameEngine);
+
+        commands.forEach((k, v) -> v.apply(k));
         inputController.applyCommands();
+
         gameEngine.updateGameState(deltaTime);
-        gdxGameGraphics.render();
+
+        gameGraphics.render();
     }
 
     @Override
@@ -92,6 +119,6 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gdxGameGraphics.dispose();
+        gameGraphics.dispose();
     }
 }
