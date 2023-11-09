@@ -10,6 +10,7 @@ import static ru.mipt.bit.platformer.game.graphics.util.GdxGameUtils.continuePro
 public class Bullet implements Entity, Collidable {
     private static final float MOVEMENT_COMPLETED = 1f;
     private static final float MOVEMENT_STARTED = 0f;
+    private final Tank parent;
     private final Direction direction;
     private final float damage;
     private final float movementSpeed;
@@ -18,7 +19,8 @@ public class Bullet implements Entity, Collidable {
     private GridPoint2 coordinates;
     private float movementProgress = MOVEMENT_STARTED;
 
-    public Bullet(GridPoint2 coordinates, Direction direction, float damage, float movementSpeed, GameEngine gameEngine) {
+    public Bullet(Tank parent, GridPoint2 coordinates, Direction direction, float damage, float movementSpeed, GameEngine gameEngine) {
+        this.parent = parent;
         this.direction = direction;
         this.coordinates = coordinates;
         destinationCoordinates = direction.apply(coordinates);
@@ -62,7 +64,7 @@ public class Bullet implements Entity, Collidable {
             return false;
         }
 
-        var collidedTo = gameEngine.getCollisionHandler().checkCollisionAt(this, pt);
+        var collidedTo = gameEngine.getCollisionHandler().checkCollisionAt(pt, this, parent);
         if (collidedTo == null) return false;
 
         if (collidedTo instanceof Livable livable) {

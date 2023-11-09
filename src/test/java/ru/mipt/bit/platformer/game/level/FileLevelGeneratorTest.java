@@ -32,7 +32,7 @@ class FileLevelGeneratorTest {
         ).toArray();
         FileLevelGenerator ls = new FileLevelGenerator("map.txt");
 
-        var engine = ls.loadLevel(null);
+        var engine = ls.loadLevel(null, null);
 
         var loadedObstacles = engine.getObstacles().stream().map(e -> ((Collidable) e).getCoordinates()).toArray();
         assertEquals(playerPosition, ((Collidable) engine.getPlayer()).getCoordinates());

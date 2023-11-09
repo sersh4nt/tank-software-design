@@ -2,34 +2,19 @@ package ru.mipt.bit.platformer.game.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Collidable;
+import ru.mipt.bit.platformer.game.Entity;
+import ru.mipt.bit.platformer.game.GameListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class CollisionHandler {
+public class CollisionHandler implements GameListener {
     private final List<Collidable> collidables = new ArrayList<>();
-    private int width = 0;
-    private int height = 0;
 
-    public CollisionHandler() {
-    }
-
-    public CollisionHandler(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public void addCollidable(Collidable collidable) {
-        collidables.add(collidable);
-    }
-
-    public void removeCollidable(Collidable collidable) {
-        collidables.remove(collidable);
-    }
-
-    public Collidable checkCollisionAt(Collidable collidable, GridPoint2 destination) {
+    public Collidable checkCollisionAt(GridPoint2 destination, Collidable... whitelist) {
         for (var c : collidables) {
-            if (c == collidable) continue;
+            if (Arrays.asList(whitelist).contains(c)) continue;
 
             if (c.getCoordinates().equals(destination) || c.getDestinationCoordinates().equals(destination)) {
                 return c;
@@ -38,7 +23,17 @@ public class CollisionHandler {
         return null;
     }
 
-    public boolean isOutside(GridPoint2 point) {
-        return point.x < 0 || point.y < 0 || point.x >= width || point.y >= height;
+    @Override
+    public void onEntityAdded(Entity entity) {
+        if (entity instanceof Collidable collidable) {
+            collidables.add(collidable);
+        }
+    }
+
+    @Override
+    public void onEntityRemoved(Entity entity) {
+        if (entity instanceof Collidable collidable) {
+            collidables.remove(collidable);
+        }
     }
 }

@@ -39,8 +39,8 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
         var newDestination = direction.apply(coordinates);
         var collisionHandler = gameEngine == null ? null : gameEngine.getCollisionHandler();
         if (collisionHandler == null
-                || collisionHandler.checkCollisionAt(this, newDestination) == null
-                && !collisionHandler.isOutside(newDestination)) {
+                || collisionHandler.checkCollisionAt(newDestination, this) == null
+                && !gameEngine.isOutside(newDestination)) {
             movementProgress = MOVEMENT_STARTED;
             destinationCoordinates = newDestination;
         }
@@ -87,7 +87,7 @@ public class Tank implements Entity, Collidable, Movable, Shootable, Livable {
         }
 
         state.shoot();
-        var bullet = new Bullet(direction.apply(coordinates), direction, 20f, 5f, gameEngine);
+        var bullet = new Bullet(this, direction.apply(coordinates), direction, 20f, 5f, gameEngine);
         gameEngine.addEntity(bullet);
     }
 

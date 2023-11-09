@@ -22,12 +22,12 @@ class RandomLevelGeneratorTest {
 
     @Test
     void loadLevel() {
-        assertNotNull(ls.loadLevel(null));
+        assertNotNull(ls.loadLevel(null, null));
     }
 
     @Test
     void getPlayer() {
-        var engine = ls.loadLevel(null);
+        var engine = ls.loadLevel(null, null);
 
         assertNotNull(engine.getPlayer());
         assertEntityIsInLevelBounds(engine.getPlayer());
@@ -35,7 +35,7 @@ class RandomLevelGeneratorTest {
 
     @Test
     void getEntities() {
-        var engine = ls.loadLevel(null);
+        var engine = ls.loadLevel(null, null);
 
         assertNotNull(engine.getObstacles());
         engine.getObstacles().forEach(this::assertEntityIsInLevelBounds);

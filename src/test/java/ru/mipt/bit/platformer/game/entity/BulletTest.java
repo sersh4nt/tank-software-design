@@ -16,7 +16,7 @@ class BulletTest {
     @EnumSource(Direction.class)
     public void testBulletKeepsMoving(Direction direction) {
         var startPosition = new GridPoint2(0, 0);
-        var bullet = new Bullet(startPosition, direction, 1f, 1f, null);
+        var bullet = new Bullet(null, startPosition, direction, 1f, 1f, null);
 
         bullet.updateState(1f);
 
@@ -29,11 +29,11 @@ class BulletTest {
         var collisionHandler = mock(CollisionHandler.class);
         var gameEngine = mock(GameEngine.class);
         when(gameEngine.getCollisionHandler()).thenReturn(collisionHandler);
-        when(collisionHandler.checkCollisionAt(any(), any())).thenReturn(obstacle);
+        when(collisionHandler.checkCollisionAt(any(), any(), any())).thenReturn(obstacle);
 
-        var bullet = new Bullet(new GridPoint2(0, 0), Direction.RIGHT, 1f, 1f, gameEngine);
+        var bullet = new Bullet(null, new GridPoint2(0, 0), Direction.RIGHT, 1f, 1f, gameEngine);
 
-        bullet.updateState(1f);
+        bullet.updateState(2f);
 
         verify(gameEngine, times(1)).removeEntity(bullet);
     }
@@ -44,9 +44,9 @@ class BulletTest {
         var collisionHandler = mock(CollisionHandler.class);
         var gameEngine = mock(GameEngine.class);
         when(gameEngine.getCollisionHandler()).thenReturn(collisionHandler);
-        when(collisionHandler.checkCollisionAt(any(), any())).thenReturn(obstacle);
+        when(collisionHandler.checkCollisionAt(any(), any(), any())).thenReturn(obstacle);
 
-        var bullet = new Bullet(new GridPoint2(0, 0), Direction.RIGHT, 1f, 1f, gameEngine);
+        var bullet = new Bullet(null, new GridPoint2(0, 0), Direction.RIGHT, 1f, 1f, gameEngine);
 
         bullet.updateState(1f);
 

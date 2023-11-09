@@ -11,13 +11,12 @@ public class GdxTreeImpl implements Renderable {
     /*
     adapter
      */
-    private final static String TEXTURE_NAME = "images/greenTree.png";
     private final Obstacle obstacle;
     private final GdxTexture texture;
 
-    public GdxTreeImpl(Obstacle obstacle, TiledMapTileLayer groundLayer) {
+    public GdxTreeImpl(Obstacle obstacle, TiledMapTileLayer groundLayer, String textureName) {
         this.obstacle = obstacle;
-        texture = new GdxTexture(TEXTURE_NAME);
+        texture = new GdxTexture(textureName);
         GdxGameUtils.moveRectangleAtTileCenter(groundLayer, texture.getRectangle(), obstacle.getCoordinates());
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
+import ru.mipt.bit.platformer.game.entity.CollisionHandler;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.entity.state.LightTankState;
@@ -29,7 +30,7 @@ public class FileLevelGenerator implements LevelGenerator {
     }
 
     @Override
-    public GameEngine loadLevel(GameListener listener) {
+    public GameEngine loadLevel(CollisionHandler collisionHandler, GameListener listener) {
         try {
             fileContent = readFileContent();
         } catch (FileNotFoundException e) {
@@ -37,7 +38,7 @@ public class FileLevelGenerator implements LevelGenerator {
             return null;
         }
 
-        var gameEngine = new GameEngine(fileContent.get(0).length(), fileContent.size(), listener);
+        var gameEngine = new GameEngine(collisionHandler, fileContent.get(0).length(), fileContent.size(), listener);
 
         generatePlayer(gameEngine);
         generateObstacles(gameEngine);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.game.Direction;
 import ru.mipt.bit.platformer.game.GameEngine;
 import ru.mipt.bit.platformer.game.GameListener;
+import ru.mipt.bit.platformer.game.entity.CollisionHandler;
 import ru.mipt.bit.platformer.game.entity.Obstacle;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.entity.state.LightTankState;
@@ -11,6 +12,8 @@ import ru.mipt.bit.platformer.game.entity.state.LightTankState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static ru.mipt.bit.platformer.game.utils.RandomUtils.getRandomPoint;
 
 public class RandomLevelGenerator implements LevelGenerator {
     /*
@@ -26,15 +29,15 @@ public class RandomLevelGenerator implements LevelGenerator {
     }
 
     @Override
-    public GameEngine loadLevel(GameListener listener) {
-        var gameEngine = new GameEngine(width, height, listener);
+    public GameEngine loadLevel(CollisionHandler collisionHandler, GameListener listener) {
+        var gameEngine = new GameEngine(collisionHandler, width, height, listener);
         var player = generatePlayer(gameEngine);
         generateObstacles(gameEngine, player);
         return gameEngine;
     }
 
     private Tank generatePlayer(GameEngine gameEngine) {
-        var playerPosition = generateRandomPosition();
+        var playerPosition = getRandomPoint(width, height);
         var player = new Tank(playerPosition, Direction.RIGHT, new LightTankState(2f, 100f, 100f, 1f), gameEngine);
         gameEngine.setPlayer(player);
         return player;
@@ -48,15 +51,11 @@ public class RandomLevelGenerator implements LevelGenerator {
         }
     }
 
-    private GridPoint2 generateRandomPosition() {
-        return new GridPoint2(random.nextInt(width - 1), random.nextInt(height - 1));
-    }
-
     private List<GridPoint2> generateObstaclePositions(GridPoint2 playerPosition) {
         var result = new ArrayList<GridPoint2>();
         var obstaclesCount = random.nextInt(width * height - 1);
         for (int i = 0; i < obstaclesCount; i++) {
-            var obstaclePosition = generateRandomPosition();
+            var obstaclePosition = getRandomPoint(width, height);
             if (obstaclePosition.equals(playerPosition)) continue;
             result.add(new GridPoint2());
         }

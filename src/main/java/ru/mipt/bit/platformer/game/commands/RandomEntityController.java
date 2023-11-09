@@ -1,13 +1,14 @@
 package ru.mipt.bit.platformer.game.commands;
 
 import ru.mipt.bit.platformer.game.Command;
-import ru.mipt.bit.platformer.game.Direction;
 import ru.mipt.bit.platformer.game.Entity;
 import ru.mipt.bit.platformer.game.GameEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import static ru.mipt.bit.platformer.game.utils.RandomUtils.getRandomDirection;
 
 public class RandomEntityController implements EntityController {
     /*
@@ -37,11 +38,5 @@ public class RandomEntityController implements EntityController {
             return new ShootCommand();
         }
         return new MoveCommand(getRandomDirection());
-    }
-
-    private Direction getRandomDirection() {
-        var constants = Direction.class.getEnumConstants();
-        var idx = random.nextInt(constants.length);
-        return constants[idx];
     }
 }

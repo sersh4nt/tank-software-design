@@ -6,15 +6,25 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import ru.mipt.bit.platformer.game.Direction;
 import ru.mipt.bit.platformer.game.GameEngine;
+import ru.mipt.bit.platformer.game.entity.state.HeavyTankState;
+import ru.mipt.bit.platformer.game.entity.state.LightTankState;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TankTest {
+    private Tank createTank() {
+        return new Tank(new GridPoint2(0, 0), Direction.RIGHT, new LightTankState(1f, 100f, 100f, 2f), null);
+    }
+
+    private Tank createTank(GameEngine gameEngine) {
+        return new Tank(new GridPoint2(0, 0), Direction.RIGHT, new LightTankState(1f, 100f, 100f, 2f), gameEngine);
+    }
+
     @ParameterizedTest
     @EnumSource(Direction.class)
     void givenDirection_whenTankStartsMove_thenUpdatesDestinationCoordinates(Direction direction) {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
+        var tank = createTank();
         var source = tank.getCoordinates();
         var destination = direction.apply(source);
 
@@ -25,7 +35,7 @@ class TankTest {
     @ParameterizedTest
     @EnumSource(Direction.class)
     void givenDirection_whenTankUpdatesState_thenTankMoves(Direction direction) {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
+        var tank = createTank();
 
         tank.moveTo(direction);
         tank.updateState(0.1f);
@@ -37,7 +47,7 @@ class TankTest {
     @ParameterizedTest
     @EnumSource(Direction.class)
     void givenDirection_whenTankCompletesMove_thenTankSetsDestinationCoordinates(Direction direction) {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
+        var tank = createTank();
         var destination = direction.apply(tank.getCoordinates());
 
         tank.moveTo(direction);
@@ -49,7 +59,7 @@ class TankTest {
     @ParameterizedTest
     @EnumSource(Direction.class)
     void rotate(Direction direction) {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
+        var tank = createTank();
 
         tank.rotate(direction);
 
@@ -58,7 +68,7 @@ class TankTest {
 
     @Test
     void getCoordinates() {
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, null);
+        var tank = createTank();
 
         assertEquals(tank.getCoordinates(), new GridPoint2(0, 0));
     }
@@ -67,7 +77,7 @@ class TankTest {
     @Test
     void destroyedTankCannotShoot() {
         var gameEngine = mock(GameEngine.class);
-        var destroyedTank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1f, 0f, 1f, gameEngine);
+        var destroyedTank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, new HeavyTankState(1f, 0f, 0f, 2f), gameEngine);
 
         destroyedTank.shoot();
 
@@ -77,7 +87,7 @@ class TankTest {
     @Test
     void tankCannotShootUntilReloaded() {
         var gameEngine = mock(GameEngine.class);
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, gameEngine);
+        var tank = createTank(gameEngine);
 
         tank.shoot();
         tank.shoot();
@@ -88,9 +98,9 @@ class TankTest {
     @Test
     void tankDestroysIfDamageIsMoreThanHealth() {
         var gameEngine = mock(GameEngine.class);
-        var tank = new Tank(new GridPoint2(0, 0), Direction.RIGHT, 1.0f, 1f, 1f, gameEngine);
+        var tank = createTank(gameEngine);
 
-        tank.damage(2f);
+        tank.damage(300f);
 
         verify(gameEngine, times(1)).removeEntity(tank);
     }

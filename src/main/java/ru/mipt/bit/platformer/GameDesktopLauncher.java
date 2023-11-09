@@ -11,6 +11,7 @@ import ru.mipt.bit.platformer.game.commands.EntityController;
 import ru.mipt.bit.platformer.game.commands.MoveCommand;
 import ru.mipt.bit.platformer.game.commands.RandomEntityController;
 import ru.mipt.bit.platformer.game.commands.ShootCommand;
+import ru.mipt.bit.platformer.game.entity.CollisionHandler;
 import ru.mipt.bit.platformer.game.entity.InputController;
 import ru.mipt.bit.platformer.game.entity.Tank;
 import ru.mipt.bit.platformer.game.entity.state.LightTankState;
@@ -23,6 +24,7 @@ import ru.mipt.bit.platformer.game.level.LevelGenerator;
 import ru.mipt.bit.platformer.game.listener.CompositeListener;
 
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
@@ -43,20 +45,24 @@ public class GameDesktopLauncher implements ApplicationListener {
     @Override
     public void create() {
         gameGraphics = new GdxGameGraphics("level.tmx");
-
         entityController = new RandomEntityController();
-//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
-        LevelGenerator loadingStrategy = new FileLevelGenerator("map.txt");
-        var listener = setupListener();
-        gameEngine = loadingStrategy.loadLevel(listener);
-
-        createEnemies();
+        loadLevel();
         initKeyMappings();
     }
 
-    private GameListener setupListener() {
+    private void loadLevel() {
+//        loadingStrategy = new RandomLevelLoadingStrategy(10, 8);
+        LevelGenerator loadingStrategy = new FileLevelGenerator("map.txt");
+        var collisionHandler = new CollisionHandler();
+        var listener = setupListener(collisionHandler);
+        gameEngine = loadingStrategy.loadLevel(collisionHandler, listener);
+        createEnemies();
+    }
+
+    private GameListener setupListener(GameListener... listeners) {
         var listener = new CompositeListener();
         listener.addListener(new GraphicsListener(gameGraphics));
+        Stream.of(listeners).forEach(listener::addListener);
         return listener;
     }
 

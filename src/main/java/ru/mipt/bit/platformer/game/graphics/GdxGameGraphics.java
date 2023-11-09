@@ -76,7 +76,7 @@ public class GdxGameGraphics implements GameGraphics {
     private Renderable getRenderableFromEntity(Entity entity) {
         Renderable renderable = null;
         if (entity instanceof Obstacle obstacle) {
-            renderable = new GdxTreeImpl(obstacle, groundLayer);
+            renderable = new GdxTreeImpl(obstacle, groundLayer, "images/greenTree.png");
         }
         if (entity instanceof Tank tank) {
             renderable = new GdxTankImpl(tank, tileMovement, "images/tank_blue.png");
