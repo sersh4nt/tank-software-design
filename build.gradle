@@ -3,6 +3,8 @@ import org.apache.tools.ant.taskdefs.condition.Os
 plugins {
     id 'application'
     id("io.qameta.allure-report") version "2.11.2"
+    id("org.sonarqube") version "4.4.1.3373"
+    id "jacoco"
 }
 
 apply from: 'versions.gradle'
@@ -44,8 +46,27 @@ sourceSets {
 test {
     ignoreFailures = true
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
 allure {
     version = '2.24.0'
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "tanks")
+        property("sonar.host.url", "http://localhost:9000")
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.named('sonar').configure {
+    dependsOn jacocoTestReport
 }
